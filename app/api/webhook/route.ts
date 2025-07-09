@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+/*import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { stripe } from '@/lib/stripe';
 import { supabase } from '@/lib/supabase';
@@ -61,4 +61,4 @@ export async function POST(request: NextRequest) {
     console.error('Error handling webhook:', error);
     return new NextResponse('Error handling webhook', { status: 500 });
   }
-}
+}*/
