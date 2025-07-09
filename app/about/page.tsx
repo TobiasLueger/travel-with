@@ -34,7 +34,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Header />
-      <main className="max-w-7xl mx-auto mt-30 px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto mt-32 px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
