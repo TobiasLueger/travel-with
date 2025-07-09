@@ -45,7 +45,7 @@ export default function CreateRidePage() {
         .insert({
           user_id: user.id,
           user_email: user.emailAddresses[0]?.emailAddress || '',
-          user_name: user.fullName || 'Anonymous',
+          user_name: user.username || user.fullName  || 'Anonymous',
           title: formData.title,
           description: formData.description,
           from_location: formData.from_location,
