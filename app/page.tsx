@@ -13,6 +13,7 @@ export default function Home() {
         <HowItWorks />
         <Testimonials />
       </main>
+      <Footer />
     </div>
   );
 }
