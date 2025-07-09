@@ -10,7 +10,7 @@ export function HeroSection() {
   return (
     <section className="relative bg-white dark:bg-gray-900 pt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row gap-10 items-center justify-between min-h-screen py-20">
+        <div className="flex flex-col md:flex-row gap-10 md:gap-2 items-center justify-between min-h-screen py-20">
           {/* Left Column - Text Content */}
           <div className="flex-1 max-w-2xl">
             <h1 className="text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight mb-8">
