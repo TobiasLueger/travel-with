@@ -65,7 +65,7 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Header />
-      <main className="max-w-4xl mx-auto mt-36 px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-4xl mx-auto mt-[5rem] px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
