@@ -78,7 +78,7 @@ export default function SearchPage() {
           ride_id: rideId,
           user_id: user.id,
           user_email: user.emailAddresses[0]?.emailAddress || '',
-          user_name: user.fullName || 'Anonymous',
+          user_name: user.username || user.fullName || 'Anonymous',
           status: 'pending',
           message: 'I would like to join this ride'
         });
