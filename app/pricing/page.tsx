@@ -22,7 +22,7 @@ export default function PricingPage() {
     }
 
     setLoading(true);
-    try {
+    /*try {
       const session = await createCheckoutSession(
         user.id,
         user.emailAddresses[0]?.emailAddress || ''
@@ -34,7 +34,8 @@ export default function PricingPage() {
       toast.error('Failed to start subscription process');
     } finally {
       setLoading(false);
-    }
+    }*/
+    setLoading(false);
   };
 
   const features = [
@@ -50,7 +51,7 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Header />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto mt-36 px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Simple, Transparent Pricing
