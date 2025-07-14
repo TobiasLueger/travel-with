@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import { UserButton, SignInButton, useUser } from '@clerk/nextjs';
+import { UserButton, SignInButton, useUser, useClerk } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 
 export function Header() {
   const { theme, setTheme } = useTheme();
   const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigation = [
@@ -72,7 +73,10 @@ export function Header() {
                         Dashboard
                       </Button>
                     </Link>
-                    <UserButton afterSignOutUrl="/" />
+                    <UserButton 
+                      afterSignOutUrl="/"
+                      signInUrl="/sign-in"
+                    />
                   </div>
                 ) : (
                   <div className="hidden lg:block">
@@ -135,9 +139,12 @@ export function Header() {
                       >
                         Dashboard
                       </Link>
-                      <div className="px-3 py-2">
-                        <UserButton afterSignOutUrl="/" />
-                      </div>
+                      <button
+                        onClick={() => signOut(() => window.location.assign('/'))}
+                        className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white block px-3 py-2 text-base font-medium text-left w-full"
+                      >
+                        Sign Out
+                      </button>
                     </>
                   ) : (
                     <div className="px-3 py-2">
