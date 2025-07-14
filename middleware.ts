@@ -5,27 +5,12 @@ import { NextRequest } from 'next/server';
 const intlMiddleware = createIntlMiddleware({
   locales: ['en', 'de'],
   defaultLocale: 'en',
-  localePrefix: 'as-needed',
-  pathnames: {
-    '/': '/',
-    '/dashboard': '/dashboard',
-    '/search': '/search',
-    '/create-ride': '/create-ride',
-    '/pricing': '/pricing',
-    '/about': '/about',
-    '/help': '/help',
-    '/terms': '/terms',
-    '/privacy': '/privacy',
-    '/cookies': '/cookies'
-  }
+  localePrefix: 'as-needed'
 });
 
 const isProtectedRoute = createRouteMatcher([
-  '/(de|en)/dashboard(.*)',
   '/dashboard(.*)',
-  '/(de|en)/create-ride(.*)',
   '/create-ride(.*)',
-  '/(de|en)/my-rides(.*)',
   '/my-rides(.*)',
 ]);
 

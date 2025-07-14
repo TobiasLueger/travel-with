@@ -22,13 +22,11 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
 
   const handleLanguageChange = (newLocale: string) => {
-    // Remove current locale from pathname if it exists
-    const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '') || '/';
-    
-    // Add new locale to path (except for default locale 'en')
-    const newPath = newLocale === 'en' ? pathWithoutLocale : `/${newLocale}${pathWithoutLocale}`;
-    
-    router.push(newPath);
+    // For now, just refresh with locale parameter
+    // This will be handled by next-intl middleware
+    const url = new URL(window.location.href);
+    url.searchParams.set('locale', newLocale);
+    window.location.href = url.toString();
   };
 
   const currentLanguage = languages.find(lang => lang.code === locale) || languages[0];
