@@ -1,0 +1,398 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "close": "Close",
+    "free": "Free",
+    "premium": "Premium"
+  },
+  "navigation": {
+    "home": "Home",
+    "rides": "Rides",
+    "pricing": "Pricing",
+    "about": "About",
+    "help": "Help",
+    "dashboard": "Dashboard",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "createRide": "Create Ride",
+    "searchRides": "Search Rides"
+  },
+  "hero": {
+    "title": "Meet Your New Transport App",
+    "subtitle": "Caring for people during they are outside, on bike, in subway or car.",
+    "cta": "FIND YOUR RIDE NOW"
+  },
+  "quickSearch": {
+    "title": "Find Your Next Ride",
+    "subtitle": "Search thousands of available rides or browse popular routes to find your perfect travel companion.",
+    "from": "From (e.g., Berlin)",
+    "to": "To (e.g., Munich)",
+    "date": "Date",
+    "searchRides": "Search Rides",
+    "popularRoutes": "Popular Routes"
+  },
+  "popularRoutes": {
+    "title": "Trending Routes",
+    "subtitle": "Discover the most popular travel routes in Germany. Join thousands of travelers sharing their journeys.",
+    "availableRides": "Available rides",
+    "avgDuration": "Avg. duration",
+    "price": "Price",
+    "viewRides": "View Rides",
+    "exploreAll": "Explore All Routes",
+    "thisWeek": "this week"
+  },
+  "whyChooseUs": {
+    "title": "Why Choose Travel-with.de?",
+    "subtitle": "We're more than just a ride-sharing platform. We're a community of travelers who care about each other and our planet.",
+    "features": {
+      "free": {
+        "title": "Completely Free",
+        "description": "All rides are offered for free. Our community believes in helping each other travel."
+      },
+      "safe": {
+        "title": "Safe & Secure",
+        "description": "Verified users, secure messaging, and community-driven safety measures."
+      },
+      "community": {
+        "title": "Active Community",
+        "description": "Join over 1 million travelers who share rides and create connections."
+      },
+      "eco": {
+        "title": "Eco-Friendly",
+        "description": "Reduce your carbon footprint by sharing rides and using group tickets."
+      },
+      "instant": {
+        "title": "Instant Booking",
+        "description": "Find and join rides instantly. No waiting, no complicated booking process."
+      },
+      "trusted": {
+        "title": "Trusted Platform",
+        "description": "Rated 4.8/5 by our community. Trusted by travelers across Germany."
+      }
+    },
+    "stats": {
+      "activeUsers": "Active Users",
+      "ridesShared": "Rides Shared",
+      "userRating": "User Rating",
+      "freeRides": "Free Rides"
+    }
+  },
+  "recentRides": {
+    "title": "Latest Rides",
+    "subtitle": "Fresh rides just posted by our community. Join these travelers on their upcoming journeys.",
+    "noRides": "No recent rides",
+    "noRidesDescription": "Be the first to create a ride today!",
+    "createRide": "Create Ride",
+    "viewDetails": "View Details",
+    "viewAllRides": "View All Rides",
+    "seatsAvailable": "seats available",
+    "by": "by"
+  },
+  "communityStats": {
+    "title": "Our Community Impact",
+    "subtitle": "Together, we're building a more connected and sustainable way to travel. See how our community is making a difference.",
+    "stats": {
+      "activeTravelers": "Active Travelers",
+      "ridesShared": "Rides Shared",
+      "freeRides": "Free Rides",
+      "co2Saved": "CO₂ Saved"
+    },
+    "descriptions": {
+      "joinCommunity": "Join our growing community",
+      "successfulJourneys": "Successful journeys completed",
+      "communitySharing": "Community-driven sharing",
+      "environmentalImpact": "Environmental impact"
+    },
+    "achievements": {
+      "growingFast": {
+        "title": "Growing Fast",
+        "description": "+25% new users this month"
+      },
+      "nationwide": {
+        "title": "Nationwide Coverage",
+        "description": "Available in all German cities"
+      },
+      "trusted": {
+        "title": "Trusted Community",
+        "description": "4.8/5 average user rating"
+      }
+    },
+    "cta": {
+      "title": "Ready to Join Our Community?",
+      "subtitle": "Start your journey today. Find rides, meet new people, and help build a more sustainable future.",
+      "findRide": "Find a Ride",
+      "offerRide": "Offer a Ride"
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {name}!",
+    "welcomeDefault": "Welcome back, Traveler!",
+    "subtitle": "Manage your rides and connect with fellow travelers.",
+    "trialActive": "Trial active until {date}",
+    "stats": {
+      "myRides": "My Rides",
+      "myRidesDescription": "Active rides offered",
+      "joinRequests": "Join Requests",
+      "joinRequestsDescription": "Pending requests",
+      "joinedRides": "Joined Rides",
+      "joinedRidesDescription": "Rides I've joined"
+    },
+    "quickActions": {
+      "createNewRide": "Create New Ride",
+      "searchRides": "Search Rides"
+    },
+    "pendingRequests": {
+      "title": "Pending Join Requests",
+      "accept": "Accept",
+      "reject": "Reject"
+    },
+    "myRides": {
+      "title": "My Rides",
+      "noRides": "You haven't created any rides yet.",
+      "createFirst": "Create Your First Ride",
+      "viewDetails": "View Details",
+      "editRide": "Edit Ride",
+      "deleteRide": "Delete Ride"
+    },
+    "joinedRides": {
+      "title": "Rides I've Joined",
+      "noRides": "You haven't joined any rides yet.",
+      "browseRides": "Browse Available Rides",
+      "offeredBy": "Offered by {name}",
+      "cancelParticipation": "Cancel Participation"
+    },
+    "deleteDialog": {
+      "title": "Delete Ride",
+      "description": "Are you sure you want to delete this ride? This action cannot be undone.",
+      "deleting": "Deleting..."
+    },
+    "cancelDialog": {
+      "title": "Cancel Ride Participation",
+      "description": "Are you sure you want to cancel your participation in this ride? The ride creator will be notified.",
+      "keepParticipation": "Keep Participation",
+      "cancelling": "Cancelling..."
+    }
+  },
+  "createRide": {
+    "title": "Create a New Ride",
+    "subtitle": "Offer a ride and connect with fellow travelers going your way.",
+    "form": {
+      "title": "Ride Details",
+      "rideTitle": "Ride Title",
+      "rideTitlePlaceholder": "e.g., Berlin to Munich",
+      "transportType": "Transport Type",
+      "from": "From",
+      "fromPlaceholder": "Departure location",
+      "to": "To",
+      "toPlaceholder": "Destination",
+      "departureDate": "Departure Date",
+      "departureTime": "Departure Time",
+      "availableSeats": "Available Seats",
+      "description": "Description (Optional)",
+      "descriptionPlaceholder": "Add any additional details about your ride...",
+      "transportTypes": {
+        "car": "Car",
+        "train": "Train",
+        "bus": "Bus",
+        "other": "Other"
+      }
+    },
+    "freeRide": {
+      "title": "Free Community Ride",
+      "description": "This ride is offered for free as part of our community spirit. Travelers can share costs like gas or train tickets voluntarily."
+    },
+    "creating": "Creating...",
+    "success": "Ride created successfully!",
+    "error": "Failed to create ride"
+  },
+  "search": {
+    "title": "Find Your Perfect Ride",
+    "subtitle": "Search through thousands of available rides and find your travel companions.",
+    "form": {
+      "title": "Search Rides",
+      "from": "From",
+      "to": "To",
+      "anyTransport": "Any transport",
+      "searching": "Searching..."
+    },
+    "results": {
+      "title": "Available Rides ({count})",
+      "noRides": "No rides found",
+      "noRidesDescription": "Try adjusting your search criteria or check back later for new rides.",
+      "seatsAvailable": "seats available",
+      "by": "by",
+      "joinRide": "Join Ride",
+      "signInToJoin": "Sign In to Join",
+      "yourRide": "Your Ride",
+      "requestPending": "Request Pending",
+      "alreadyJoined": "Already Joined"
+    },
+    "joinRequest": {
+      "success": "Join request sent successfully!",
+      "error": "Failed to send join request",
+      "ownRide": "You cannot join your own ride",
+      "alreadyPending": "You already have a pending request for this ride",
+      "alreadyJoined": "You have already joined this ride",
+      "signInRequired": "Please sign in to join a ride"
+    }
+  },
+  "editRide": {
+    "title": "Edit Ride",
+    "subtitle": "Update your ride details and let travelers know about any changes.",
+    "updateNotice": {
+      "title": "Update Notice",
+      "description": "Any travelers who have already joined this ride will be notified of the changes. Please make sure to communicate important updates directly with them."
+    },
+    "updating": "Updating...",
+    "updateRide": "Update Ride",
+    "success": "Ride updated successfully!",
+    "error": "Failed to update ride"
+  },
+  "rideDetails": {
+    "title": "Ride Details",
+    "backToDashboard": "Back to Dashboard",
+    "route": "Route",
+    "details": {
+      "date": "Date",
+      "time": "Time",
+      "availableSeats": "Available Seats"
+    },
+    "description": "Description",
+    "status": "Status",
+    "created": "Created {date}",
+    "participants": {
+      "title": "Participants ({count})",
+      "overview": {
+        "pending": "Pending Requests",
+        "accepted": "Accepted",
+        "rejected": "Rejected"
+      },
+      "noParticipants": "No one has joined this ride yet.",
+      "message": "Message:",
+      "requested": "Requested {date}",
+      "accept": "Accept",
+      "reject": "Reject",
+      "accepting": "Accepting...",
+      "rejecting": "Rejecting..."
+    },
+    "confirmDialog": {
+      "accept": {
+        "title": "Accept Participant",
+        "description": "Are you sure you want to accept {name}'s request to join this ride?"
+      },
+      "reject": {
+        "title": "Reject Participant", 
+        "description": "Are you sure you want to reject {name}'s request to join this ride?"
+      },
+      "acceptParticipant": "Accept Participant",
+      "rejectParticipant": "Reject Participant"
+    }
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "Start with our free community features, then upgrade to Premium for the full travel-with.de experience.",
+    "community": {
+      "title": "Community",
+      "price": "Free",
+      "description": "Perfect for occasional travelers",
+      "features": {
+        "searchRides": "Search and browse rides",
+        "createRides": "Create up to 3 rides per month",
+        "basicMessaging": "Basic messaging",
+        "communitySupport": "Community support"
+      },
+      "currentPlan": "Current Plan"
+    },
+    "premium": {
+      "title": "Premium",
+      "price": "€9.99",
+      "perMonth": "/month",
+      "description": "Full access to all features",
+      "trial": "🎉 First 2 months FREE!",
+      "features": {
+        "unlimitedSearches": "Unlimited ride searches",
+        "unlimitedRides": "Create unlimited rides",
+        "prioritySupport": "Priority customer support",
+        "advancedFilters": "Advanced search filters",
+        "rideHistory": "Ride history and analytics",
+        "premiumBadge": "Premium user badge",
+        "earlyAccess": "Early access to new features"
+      },
+      "startTrial": "Start Free Trial",
+      "processing": "Processing...",
+      "alreadySubscribed": "Already Subscribed",
+      "activeUntil": "Active until {date}",
+      "cancelAnytime": "Cancel anytime. No hidden fees."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": {
+        "afterTrial": {
+          "question": "What happens after the free trial?",
+          "answer": "After your 2-month free trial, you'll be automatically charged €9.99/month. You can cancel anytime before the trial ends with no charge."
+        },
+        "cancel": {
+          "question": "Can I cancel my subscription?",
+          "answer": "Yes! You can cancel your subscription anytime through your account settings. You'll continue to have Premium access until the end of your current billing period."
+        },
+        "stillFree": {
+          "question": "Are rides still free with Premium?",
+          "answer": "Absolutely! All rides remain free for everyone. Premium just gives you additional features to enhance your travel experience."
+        }
+      }
+    }
+  },
+  "footer": {
+    "description": "Connect with fellow travelers and share your journey. Find free rides by car, train, and other transport across Germany and Europe.",
+    "location": "Berlin, Germany",
+    "email": "hello@travel-with.de",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "links": {
+      "searchRides": "Search Rides",
+      "createRide": "Create Ride",
+      "about": "About",
+      "helpSupport": "Help & Support",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
+    },
+    "copyright": "© 2024 Travel-with.de. All rights reserved.",
+    "madeWith": "Made with ❤️ for the travel community"
+  },
+  "toasts": {
+    "success": {
+      "rideCreated": "Ride created successfully!",
+      "rideUpdated": "Ride updated successfully!",
+      "rideDeleted": "Ride deleted successfully!",
+      "joinRequestSent": "Join request sent successfully!",
+      "requestAccepted": "Request accepted successfully!",
+      "requestRejected": "Request rejected successfully!",
+      "participationCancelled": "Ride participation cancelled successfully!"
+    },
+    "error": {
+      "createRide": "Failed to create ride",
+      "updateRide": "Failed to update ride",
+      "deleteRide": "Failed to delete ride",
+      "joinRequest": "Failed to send join request",
+      "acceptRequest": "Failed to accept request",
+      "rejectRequest": "Failed to reject request",
+      "cancelParticipation": "Failed to cancel ride participation",
+      "loadData": "Failed to load data",
+      "unauthorized": "You can only {action} your own {item}",
+      "signInRequired": "Please sign in to {action}"
+    }
+  }
+}

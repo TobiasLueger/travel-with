@@ -5,19 +5,22 @@ import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { UserButton, SignInButton, useUser, useClerk } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
+import { LanguageSwitcher } from '@/components/language-switcher';
 import { Moon, Sun, Menu, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function Header() {
   const { theme, setTheme } = useTheme();
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
+  const t = useTranslations('navigation');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Rides', href: '/search' },
-    { name: 'Pricing', href: '/pricing' },
-    { name: 'About', href: '/about' },
+    { name: t('home'), href: '/' },
+    { name: t('rides'), href: '/search' },
+    { name: t('pricing'), href: '/pricing' },
+    { name: t('about'), href: '/about' },
   ];
 
   return (
@@ -49,6 +52,9 @@ export function Header() {
           {/* Right side - Menu dots */}
           <div className="flex items-center space-x-4">
 
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {/* Theme toggle - hidden on mobile to match design */}
             <div className="hidden lg:block">
               <Button
@@ -70,7 +76,7 @@ export function Header() {
                   <div className="hidden lg:flex items-center space-x-3">
                     <Link href="/dashboard">
                       <Button variant="outline" size="sm">
-                        Dashboard
+                        {t('dashboard')}
                       </Button>
                     </Link>
                     <UserButton 
@@ -86,7 +92,7 @@ export function Header() {
                         size="sm"
                         className="bg-black hover:bg-gray-800 text-white"
                       >
-                        Sign In
+                        {t('signIn')}
                       </Button>
                     </SignInButton>
                   </div>
@@ -137,20 +143,20 @@ export function Header() {
                         className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white block px-3 py-2 text-base font-medium"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        Dashboard
+                        {t('dashboard')}
                       </Link>
                       <button
                         onClick={() => signOut(() => window.location.assign('/'))}
                         className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white block px-3 py-2 text-base font-medium text-left w-full"
                       >
-                        Sign Out
+                        {t('signOut')}
                       </button>
                     </>
                   ) : (
                     <div className="px-3 py-2">
                       <SignInButton mode="modal">
                         <Button variant="default" size="sm">
-                          Sign In
+                          {t('signIn')}
                         </Button>
                       </SignInButton>
                     </div>

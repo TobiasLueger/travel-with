@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'react-hot-toast';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -13,24 +15,30 @@ export const metadata: Metadata = {
   keywords: 'rideshare, carpool, train sharing, travel companions, free rides',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params: { locale }
 }: {
   children: React.ReactNode;
+  params: { locale: string };
 }) {
+  const messages = await getMessages();
+
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster position="top-right" />
-          </ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster position="top-right" />
+            </ThemeProvider>
+          </NextIntlClientProvider>
         </body>
       </html>
     </ClerkProvider>
