@@ -72,8 +72,7 @@ export function CommunityStats() {
     } else if (num >= 1000) {
       return `${(num / 1000).toFixed(1)}K+`;
     } else if (num === 0) {
-      //return 'Growing';
-      return `${(num / 1000).toFixed(1)}K+`;
+      return 'Growing';
     }
     return num.toString();
   };
