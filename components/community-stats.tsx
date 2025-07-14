@@ -233,6 +233,7 @@ export function CommunityStats() {
             </div>
           </CardContent>
         </Card>
+      </div>
     </section>
   );
 }
