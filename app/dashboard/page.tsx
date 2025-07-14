@@ -8,12 +8,28 @@ import { Footer } from '@/components/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Car, Train, Bus, MapPin, Calendar, Clock, Users, Bell } from 'lucide-react';
+import { Plus, Car, Train, Bus, MapPin, Calendar, Clock, Users, Bell, Trash2, MoreVertical } from 'lucide-react';
 import { supabase, type Ride, type RideJoin } from '@/lib/supabase';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { useSubscription } from '@/hooks/use-subscription';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
@@ -22,6 +38,9 @@ export default function DashboardPage() {
   const [joinRequests, setJoinRequests] = useState<RideJoin[]>([]);
   const [myJoinedRides, setMyJoinedRides] = useState<(RideJoin & { ride: Ride })[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [rideToDelete, setRideToDelete] = useState<Ride | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   if (isLoaded && !user) {
     redirect('/');
@@ -87,6 +106,36 @@ export default function DashboardPage() {
       console.error('Error handling join request:', error);
       toast.error(`Failed to ${action} request`);
     }
+  };
+
+  const handleDeleteRide = async () => {
+    if (!rideToDelete) return;
+
+    setDeleting(true);
+    try {
+      const { error } = await supabase
+        .from('rides')
+        .delete()
+        .eq('id', rideToDelete.id)
+        .eq('user_id', user?.id); // Extra security check
+
+      if (error) throw error;
+      
+      toast.success('Ride deleted successfully');
+      setDeleteDialogOpen(false);
+      setRideToDelete(null);
+      fetchDashboardData(); // Refresh the data
+    } catch (error) {
+      console.error('Error deleting ride:', error);
+      toast.error('Failed to delete ride');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const openDeleteDialog = (ride: Ride) => {
+    setRideToDelete(ride);
+    setDeleteDialogOpen(true);
   };
 
   const getTransportIcon = (type: string) => {
@@ -295,7 +344,7 @@ export default function DashboardPage() {
             ) : (
               <div className="space-y-4">
                 {myRides.map((ride) => (
-                  <div key={ride.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                  <div key={ride.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg group">
                     <div className="flex-1">
                       <div className="flex items-center mb-2">
                         {getTransportIcon(ride.transport_type)}
@@ -318,9 +367,32 @@ export default function DashboardPage() {
                         </div>
                       </div>
                     </div>
-                    <Badge className={getStatusColor(ride.status)}>
-                      {ride.status}
-                    </Badge>
+                    <div className="flex items-center space-x-2">
+                      <Badge className={getStatusColor(ride.status)}>
+                        {ride.status}
+                      </Badge>
+                      
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => openDeleteDialog(ride)}
+                            className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete Ride
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -379,6 +451,38 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </main>
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Ride</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this ride? This action cannot be undone.
+              {rideToDelete && (
+                <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <div className="font-medium text-gray-900 dark:text-white">
+                    {rideToDelete.from_location} → {rideToDelete.to_location}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                    {format(new Date(rideToDelete.departure_date), 'MMM d, yyyy')} at {rideToDelete.departure_time}
+                  </div>
+                </div>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteRide}
+              disabled={deleting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {deleting ? 'Deleting...' : 'Delete Ride'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <Footer />
     </div>
   );
