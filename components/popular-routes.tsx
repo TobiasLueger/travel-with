@@ -17,7 +17,6 @@ export function PopularRoutes() {
   const router = useRouter();
   const [routes, setRoutes] = useState<RouteStats[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchPopularRoutes = async () => {
     try {
@@ -106,29 +105,6 @@ export function PopularRoutes() {
 
   useEffect(() => {
     fetchPopularRoutes();
-  }, [refreshKey]);
-
-  // Set up real-time subscription for rides updates
-  useEffect(() => {
-    const channel = supabase
-      .channel('popular-routes-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'rides'
-        },
-        () => {
-          // Refresh routes when any ride is updated
-          fetchPopularRoutes();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, []);
 
   if (loading) {

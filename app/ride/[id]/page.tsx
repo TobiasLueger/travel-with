@@ -118,26 +118,14 @@ export default function RideDetailsPage() {
       
       // If we accepted a participant, decrease available seats
       if (action === 'accept' && ride) {
-        // First get the current ride data
-        const { data: currentRide, error: fetchError } = await supabase
-          .from('rides')
-          .select('available_seats')
-          .eq('id', ride.id)
-          .single();
-
-        if (fetchError || !currentRide || currentRide.available_seats <= 0) {
-          toast.error('No seats available for this ride');
-          setActionLoading(null);
-          return;
-        }
-
         const { error: rideError } = await supabase
           .from('rides')
           .update({ 
-            available_seats: currentRide.available_seats - 1,
+            available_seats: supabase.sql`available_seats - 1`,
             updated_at: new Date().toISOString()
           })
-          .eq('id', ride.id);
+          .eq('id', ride.id)
+          .gt('available_seats', 0);
 
         if (rideError) {
           console.error('Error updating ride seats:', rideError);

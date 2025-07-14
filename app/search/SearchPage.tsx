@@ -147,9 +147,6 @@ export default function SearchPage() {
         [rideId]: 'pending'
       }));
       
-      // Refresh the rides data to get updated seat counts
-      await searchRides();
-      
       toast.success('Join request sent successfully!');
     } catch (error) {
       console.error('Error joining ride:', error);

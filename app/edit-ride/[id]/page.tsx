@@ -44,27 +44,16 @@ export default function EditRidePage() {
       if (!user || !rideId) return;
 
       try {
-        console.log('🔍 Fetching ride for editing...');
-        console.log('User ID:', user.id);
-        console.log('Ride ID:', rideId);
-        
         const { data, error } = await supabase
           .from('rides')
           .select('*')
           .eq('id', rideId)
           .single();
 
-        if (error) {
-          console.error('❌ Error fetching ride:', error);
-          throw error;
-        }
-        
-        console.log('✅ Fetched ride data:', data);
+        if (error) throw error;
 
         // Check if the ride belongs to the current user
         if (data.user_id !== user.id) {
-          console.error('❌ Unauthorized: Ride belongs to different user');
-          console.log('Ride owner:', data.user_id, 'Current user:', user.id);
           toast.error('You can only edit your own rides');
           router.push('/dashboard');
           return;
@@ -81,12 +70,6 @@ export default function EditRidePage() {
           available_seats: data.available_seats.toString(),
           transport_type: data.transport_type,
           price_per_person: data.price_per_person.toString()
-        });
-        
-        console.log('✅ Form data initialized:', {
-          title: data.title,
-          available_seats: data.available_seats,
-          transport_type: data.transport_type
         });
       } catch (error) {
         console.error('Error fetching ride:', error);
@@ -106,86 +89,29 @@ export default function EditRidePage() {
 
     setLoading(true);
     try {
-      console.log('🔄 Starting ride update process...');
-      console.log('User ID:', user.id);
-      console.log('Ride ID:', ride.id);
-      console.log('Ride owner ID:', ride.user_id);
-      console.log('Form data:', formData);
-      
-      // Verify user owns the ride
-      if (ride.user_id !== user.id) {
-        throw new Error('Unauthorized: You can only edit your own rides');
-      }
-      
-      // First, let's check if we can read the current ride
-      const { data: currentRide, error: readError } = await supabase
+      const { error } = await supabase
         .from('rides')
-        .select('*')
-        .eq('id', ride.id)
-        .single();
-        
-      if (readError) {
-        console.error('❌ Error reading current ride:', readError);
-        throw new Error(`Cannot read ride: ${readError.message}`);
-      }
-      
-      console.log('✅ Current ride data:', currentRide);
-      
-      // Prepare update data
-      const updateData = {
-        title: formData.title,
-        description: formData.description,
-        from_location: formData.from_location,
-        to_location: formData.to_location,
-        departure_date: formData.departure_date,
-        departure_time: formData.departure_time,
-        available_seats: parseInt(formData.available_seats),
-        transport_type: formData.transport_type,
-        price_per_person: parseFloat(formData.price_per_person),
-        updated_at: new Date().toISOString()
-      };
-      
-      console.log('📝 Update data:', updateData);
-      
-      // Perform the update
-      const { data: updatedData, error } = await supabase
-        .from('rides')
-        .update(updateData)
-        .eq('id', ride.id)
-        .select(); // This will return the updated row
-        
-      console.log('📊 Supabase response:', { data: updatedData, error });
-      
-      if (error) {
-        console.error('❌ Supabase update error:', error);
-        throw error;
-      }
-      
-      if (!updatedData || updatedData.length === 0) {
-        console.error('❌ No rows were updated');
-        throw new Error('No rows were updated. This might be a permissions issue.');
-      }
-      
-      console.log('✅ Update successful! Updated data:', updatedData[0]);
-      
-      // Verify the update by reading the ride again
-      const { data: verifyData, error: verifyError } = await supabase
-        .from('rides')
-        .select('*')
-        .eq('id', ride.id)
-        .single();
-        
-      if (verifyError) {
-        console.error('❌ Error verifying update:', verifyError);
-      } else {
-        console.log('🔍 Verified updated ride:', verifyData);
-      }
-      
+        .update({
+          title: formData.title,
+          description: formData.description,
+          from_location: formData.from_location,
+          to_location: formData.to_location,
+          departure_date: formData.departure_date,
+          departure_time: formData.departure_time,
+          available_seats: parseInt(formData.available_seats),
+          transport_type: formData.transport_type,
+          price_per_person: parseFloat(formData.price_per_person),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', ride.id);
+
+      if (error) throw error;
+
       toast.success('Ride updated successfully!');
       router.push('/dashboard');
     } catch (error) {
-      console.error('❌ Error updating ride:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to update ride');
+      console.error('Error updating ride:', error);
+      toast.error('Failed to update ride');
     } finally {
       setLoading(false);
     }
