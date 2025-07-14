@@ -118,44 +118,14 @@ export default function RideDetailsPage() {
       
       // If we accepted a participant, decrease available seats
       if (action === 'accept' && ride) {
-        // First get the current ride data
-        const { data: currentRide, error: fetchError } = await supabase
-          .from('rides')
-          .select('available_seats')
-          .eq('id', ride.id)
-          .single();
-
-        if (fetchError) {
-          console.error('Error fetching ride data:', fetchError);
-          // Revert the participant status if ride fetch failed
-          await supabase
-            .from('ride_joins')
-            .update({ status: 'pending' })
-            .eq('id', participantId);
-          toast.error('Failed to update available seats');
-          setActionLoading(null);
-          return;
-        }
-
-        if (currentRide.available_seats <= 0) {
-          // Revert the participant status if no seats available
-          await supabase
-            .from('ride_joins')
-            .update({ status: 'pending' })
-            .eq('id', participantId);
-          toast.error('No seats available for this ride');
-          setActionLoading(null);
-          return;
-        }
-
-        // Update with decremented seat count
         const { error: rideError } = await supabase
           .from('rides')
           .update({ 
-            available_seats: currentRide.available_seats - 1,
+            available_seats: supabase.sql`available_seats - 1`,
             updated_at: new Date().toISOString()
           })
-          .eq('id', ride.id);
+          .eq('id', ride.id)
+          .gt('available_seats', 0);
 
         if (rideError) {
           console.error('Error updating ride seats:', rideError);
@@ -170,7 +140,7 @@ export default function RideDetailsPage() {
         }
         
         // Update local ride state
-        setRide(prev => prev ? { ...prev, available_seats: currentRide.available_seats - 1 } : null);
+        setRide(prev => prev ? { ...prev, available_seats: prev.available_seats - 1 } : null);
       }
       
       toast.success(`Participant ${action}ed successfully`);
