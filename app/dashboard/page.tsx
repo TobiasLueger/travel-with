@@ -451,6 +451,12 @@ export default function DashboardPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild>
+                            <Link href={`/ride/${ride.id}`}>
+                              <Users className="h-4 w-4 mr-2" />
+                              View Details
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
                             <Link href={`/edit-ride/${ride.id}`}>
                               <Edit className="h-4 w-4 mr-2" />
                               Edit Ride
