@@ -154,6 +154,41 @@ export default function DashboardPage() {
     setDeleteDialogOpen(true);
   };
 
+  const handleCancelJoinedRide = async () => {
+    if (!joinToCancel) return;
+
+    setCanceling(true);
+    try {
+      const { error } = await supabase
+        .from('ride_joins')
+        .delete()
+        .eq('id', joinToCancel.id);
+
+      if (error) throw error;
+      
+      // Remove the cancelled join from local state
+      setMyJoinedRides(prevJoins => 
+        prevJoins.filter(join => join.id !== joinToCancel.id)
+      );
+      
+      toast.success('Ride participation cancelled successfully');
+      setCancelDialogOpen(false);
+      setJoinToCancel(null);
+    } catch (error) {
+      console.error('Error cancelling ride participation:', error);
+      toast.error('Failed to cancel ride participation');
+      // On error, refresh data to ensure consistency
+      fetchDashboardData();
+    } finally {
+      setCanceling(false);
+    }
+  };
+
+  const openCancelDialog = (joinedRide: RideJoin & { ride: Ride }) => {
+    setJoinToCancel(joinedRide);
+    setCancelDialogOpen(true);
+  };
+
   const getTransportIcon = (type: string) => {
     switch (type) {
       case 'car':
@@ -466,6 +501,16 @@ export default function DashboardPage() {
                     <Badge className={getStatusColor(joinedRide.status)}>
                       {joinedRide.status}
                     </Badge>
+                    {(joinedRide.status === 'pending' || joinedRide.status === 'accepted') && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => openCancelDialog(joinedRide)}
+                        className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300"
+                      >
+                        Cancel
+                      </Button>
+                    )}
                   </div>
                 ))}
               </div>
