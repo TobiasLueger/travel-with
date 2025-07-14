@@ -7,7 +7,38 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase environment variables');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'travel-with-de'
+    }
+  }
+});
+
+// Create a function to get Supabase client with Clerk token
+export const getSupabaseWithAuth = async (clerkToken?: string) => {
+  if (clerkToken) {
+    return createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+        detectSessionInUrl: false
+      },
+      global: {
+        headers: {
+          'Authorization': `Bearer ${clerkToken}`,
+          'X-Client-Info': 'travel-with-de'
+        }
+      }
+    });
+  }
+  return supabase;
+};
 
 export interface Ride {
   id: string;

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Calendar, Clock, Users, Car, Train, Bus, Search } from 'lucide-react';
-import { supabase, type Ride } from '@/lib/supabase';
+import { supabase, getSupabaseWithAuth, type Ride } from '@/lib/supabase';
 import { format } from 'date-fns';
 import { useSearchParams } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
@@ -125,7 +125,11 @@ export default function SearchPage() {
     }
 
     try {
-      const { error } = await supabase
+      // Get Clerk session token for authentication
+      const token = await user.getToken({ template: 'supabase' });
+      const authenticatedSupabase = await getSupabaseWithAuth(token);
+
+      const { error } = await authenticatedSupabase
         .from('ride_joins')
         .insert({
           ride_id: rideId,

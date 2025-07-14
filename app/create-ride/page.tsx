@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Plus, MapPin, Calendar, Clock, Users, Car, Train, Bus } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { supabase, getSupabaseWithAuth } from '@/lib/supabase';
 import toast from 'react-hot-toast';
 
 export default function CreateRidePage() {
@@ -57,6 +57,12 @@ export default function CreateRidePage() {
         throw new Error('Departure time is required');
       }
 
+      // Get Clerk session token for authentication
+      const token = await user.getToken({ template: 'supabase' });
+      console.log('Clerk token available:', !!token);
+      
+      // Use authenticated Supabase client
+      const authenticatedSupabase = await getSupabaseWithAuth(token);
       const rideData = {
         user_id: user.id,
         user_email: user.emailAddresses[0]?.emailAddress || '',
@@ -74,8 +80,9 @@ export default function CreateRidePage() {
       };
 
       console.log('Creating ride with data:', rideData);
+      console.log('User ID:', user.id);
 
-      const { error } = await supabase
+      const { data, error } = await authenticatedSupabase
         .from('rides')
         .insert(rideData);
 
@@ -84,6 +91,7 @@ export default function CreateRidePage() {
         throw new Error(error.message || 'Failed to create ride');
       }
 
+      console.log('Ride created successfully:', data);
       toast.success('Ride created successfully!');
       router.push('/dashboard');
     } catch (error) {
