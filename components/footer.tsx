@@ -27,8 +27,8 @@ export function Footer() {
             <div className="space-y-8">
               <div>
                 <Link href="/" className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
-                    <div className="w-4 h-4 bg-white rounded-full"></div>
+                  <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center mr-2">
+                    <div className="w-3 h-3 bg-white rounded-full"></div>
                   </div>
                   <span className="text-2xl font-bold text-gray-900 dark:text-white">
                     travel-with.de
