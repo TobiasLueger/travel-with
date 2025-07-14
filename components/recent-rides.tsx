@@ -153,7 +153,7 @@ export function RecentRides() {
                       </div>
                       <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                         <Users className="h-4 w-4 mr-2" />
-                        {ride.available_seats} seats available
+                        {ride.available_seats > 0 ? `${ride.available_seats} seats available` : 'Ride full'}
                       </div>
                     </div>
 
@@ -170,9 +170,11 @@ export function RecentRides() {
                       <Button 
                         size="sm" 
                         onClick={() => router.push('/search')}
+                        disabled={ride.available_seats <= 0}
+                        variant={ride.available_seats <= 0 ? "outline" : "default"}
                         className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                       >
-                        View Details
+                        {ride.available_seats > 0 ? 'View Details' : 'Ride Full'}
                       </Button>
                     </div>
                   </CardContent>

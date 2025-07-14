@@ -170,7 +170,9 @@ export function PopularRoutes() {
                       <Users className="h-4 w-4 mr-1" />
                       <span>Available rides</span>
                     </div>
-                    <span className="font-medium text-gray-900 dark:text-white">{route.ride_count}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {route.ride_count > 0 ? route.ride_count : 'None'}
+                    </span>
                   </div>
                   
                   <div className="flex items-center justify-between text-sm">

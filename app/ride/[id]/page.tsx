@@ -102,12 +102,46 @@ export default function RideDetailsPage() {
   const handleParticipantAction = async (participantId: string, action: 'accept' | 'reject') => {
     setActionLoading(participantId);
     try {
+      // If accepting, check if there are still seats available
+      if (action === 'accept' && ride && ride.available_seats <= 0) {
+        toast.error('No seats available for this ride');
+        setActionLoading(null);
+        return;
+      }
+
       const { error } = await supabase
         .from('ride_joins')
         .update({ status: action === 'accept' ? 'accepted' : 'rejected' })
         .eq('id', participantId);
 
       if (error) throw error;
+      
+      // If we accepted a participant, decrease available seats
+      if (action === 'accept' && ride) {
+        const { error: rideError } = await supabase
+          .from('rides')
+          .update({ 
+            available_seats: supabase.sql`available_seats - 1`,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', ride.id)
+          .gt('available_seats', 0);
+
+        if (rideError) {
+          console.error('Error updating ride seats:', rideError);
+          // Revert the participant status if seat update failed
+          await supabase
+            .from('ride_joins')
+            .update({ status: 'pending' })
+            .eq('id', participantId);
+          toast.error('Failed to update available seats');
+          setActionLoading(null);
+          return;
+        }
+        
+        // Update local ride state
+        setRide(prev => prev ? { ...prev, available_seats: prev.available_seats - 1 } : null);
+      }
       
       toast.success(`Participant ${action}ed successfully`);
       
