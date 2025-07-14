@@ -96,12 +96,50 @@ export default function DashboardPage() {
 
   const handleJoinRequest = async (joinId: string, action: 'accept' | 'reject') => {
     try {
+      // If accepting, we need to update the ride's available seats
+      if (action === 'accept') {
+        const joinRequest = joinRequests.find(jr => jr.id === joinId);
+        if (joinRequest) {
+          const ride = myRides.find(r => r.id === joinRequest.ride_id);
+          if (ride && ride.available_seats <= 0) {
+            toast.error('No seats available for this ride');
+            return;
+          }
+        }
+      }
+
       const { error } = await supabase
         .from('ride_joins')
         .update({ status: action === 'accept' ? 'accepted' : 'rejected' })
         .eq('id', joinId);
 
       if (error) throw error;
+      
+      // If we accepted a join request, decrease available seats
+      if (action === 'accept') {
+        const joinRequest = joinRequests.find(jr => jr.id === joinId);
+        if (joinRequest) {
+          const { error: rideError } = await supabase
+            .from('rides')
+            .update({ 
+              available_seats: supabase.sql`available_seats - 1`,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', joinRequest.ride_id)
+            .gt('available_seats', 0);
+
+          if (rideError) {
+            console.error('Error updating ride seats:', rideError);
+            // Revert the join request if seat update failed
+            await supabase
+              .from('ride_joins')
+              .update({ status: 'pending' })
+              .eq('id', joinId);
+            toast.error('Failed to update available seats');
+            return;
+          }
+        }
+      }
       
       toast.success(`Request ${action}ed successfully`);
       fetchDashboardData();

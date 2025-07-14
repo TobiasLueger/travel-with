@@ -109,6 +109,11 @@ export default function SearchPage() {
       return;
     }
 
+    // Check if ride has available seats
+    if (ride && ride.available_seats <= 0) {
+      toast.error('This ride is full - no seats available');
+      return;
+    }
     // Check if user already has a pending or accepted request
     const existingStatus = userJoinRequests[rideId];
     if (existingStatus === 'pending') {
@@ -183,6 +188,10 @@ export default function SearchPage() {
     
     if (ride.user_id === user.id) {
       return { text: 'Your Ride', disabled: true };
+    }
+    
+    if (ride.available_seats <= 0) {
+      return { text: 'Ride Full', disabled: true };
     }
     
     const joinStatus = userJoinRequests[ride.id];
