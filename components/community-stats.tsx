@@ -228,6 +228,7 @@ export function CommunityStats() {
                 className="border-white text-white hover:bg-white hover:text-purple-600"
               >
                 Offer a Ride
+              </Button>
               {formatNumber(communityData.activeRides)}
             </div>
           </CardContent>
