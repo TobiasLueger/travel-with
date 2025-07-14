@@ -175,6 +175,26 @@ export default function SearchPage() {
     }
   };
 
+  // Function to get button text and state based on ride and user status
+  const getJoinButtonState = (ride: Ride) => {
+    if (!user) {
+      return { text: 'Sign In to Join', disabled: true };
+    }
+    
+    if (ride.user_id === user.id) {
+      return { text: 'Your Ride', disabled: true };
+    }
+    
+    const joinStatus = userJoinRequests[ride.id];
+    if (joinStatus === 'pending') {
+      return { text: 'Request Pending', disabled: true };
+    } else if (joinStatus === 'accepted') {
+      return { text: 'Already Joined', disabled: true };
+    }
+    
+    return { text: 'Join Ride', disabled: false };
+  };
+
   useEffect(() => {
     searchRides();
   }, []);
@@ -328,26 +348,6 @@ export default function SearchPage() {
                           )}
                         </div>
                         
-  // Function to get button text and state based on ride and user status
-  const getJoinButtonState = (ride: Ride) => {
-    if (!user) {
-      return { text: 'Sign In to Join', disabled: true };
-    }
-    
-    if (ride.user_id === user.id) {
-      return { text: 'Your Ride', disabled: true };
-    }
-    
-    const joinStatus = userJoinRequests[ride.id];
-    if (joinStatus === 'pending') {
-      return { text: 'Request Pending', disabled: true };
-    } else if (joinStatus === 'accepted') {
-      return { text: 'Already Joined', disabled: true };
-    }
-    
-    return { text: 'Join Ride', disabled: false };
-  };
-
                         <div className="mt-4 lg:mt-0 lg:ml-6 flex items-center">
                           <div className="text-right mr-4">
                             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
