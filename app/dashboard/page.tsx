@@ -192,6 +192,7 @@ export default function DashboardPage() {
     setDeleteDialogOpen(true);
   };
 
+  // Function to handle when a participant cancels (increases available seats)
   const handleCancelJoinedRide = async () => {
     if (!joinToCancel) return;
 
@@ -207,6 +208,22 @@ export default function DashboardPage() {
       // Verify that this join request belongs to the current user
       if (joinToCancel.user_id !== user?.id) {
         throw new Error('Unauthorized: You can only cancel your own join requests');
+      }
+
+      // If the join request was accepted, we need to increase available seats
+      if (joinToCancel.status === 'accepted') {
+        const { error: rideError } = await supabase
+          .from('rides')
+          .update({ 
+            available_seats: supabase.sql`available_seats + 1`,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', joinToCancel.ride.id);
+
+        if (rideError) {
+          console.error('Error updating ride seats:', rideError);
+          throw new Error('Failed to update available seats');
+        }
       }
 
       const { error } = await supabase
