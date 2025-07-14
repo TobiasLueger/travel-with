@@ -8,7 +8,6 @@ import { Footer } from '@/components/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Car, Train, Bus, MapPin, Calendar, Clock, Users, Bell, Trash2, MoreVertical } from 'lucide-react';
 import { Plus, Car, Train, Bus, MapPin, Calendar, Clock, Users, Bell, Trash2, MoreVertical, Edit } from 'lucide-react';
 import { supabase, type Ride, type RideJoin } from '@/lib/supabase';
 import { format } from 'date-fns';
