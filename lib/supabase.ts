@@ -20,23 +20,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 });
 
-// Create a function to get Supabase client with Clerk token
-export const getSupabaseWithAuth = async (clerkToken?: string) => {
-  if (clerkToken) {
-    return createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-        detectSessionInUrl: false
-      },
-      global: {
-        headers: {
-          'Authorization': `Bearer ${clerkToken}`,
-          'X-Client-Info': 'travel-with-de'
-        }
-      }
-    });
-  }
+// Simple function to get the regular Supabase client
+export const getSupabaseClient = () => {
   return supabase;
 };
 
