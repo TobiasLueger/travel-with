@@ -159,12 +159,28 @@ export default function DashboardPage() {
 
     setCanceling(true);
     try {
+      // Debug: Log the join request details
+      console.log('Attempting to cancel join request:', {
+        joinId: joinToCancel.id,
+        userId: user?.id,
+        joinUserId: joinToCancel.user_id
+      });
+
+      // Verify that this join request belongs to the current user
+      if (joinToCancel.user_id !== user?.id) {
+        throw new Error('Unauthorized: You can only cancel your own join requests');
+      }
+
       const { error } = await supabase
         .from('ride_joins')
         .delete()
-        .eq('id', joinToCancel.id);
+        .eq('id', joinToCancel.id)
+        .eq('user_id', user?.id); // Additional security check
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase delete error:', error);
+        throw error;
+      }
       
       // Remove the cancelled join from local state
       setMyJoinedRides(prevJoins => 
@@ -176,7 +192,7 @@ export default function DashboardPage() {
       setJoinToCancel(null);
     } catch (error) {
       console.error('Error cancelling ride participation:', error);
-      toast.error('Failed to cancel ride participation');
+      toast.error(error instanceof Error ? error.message : 'Failed to cancel ride participation');
       // On error, refresh data to ensure consistency
       fetchDashboardData();
     } finally {
