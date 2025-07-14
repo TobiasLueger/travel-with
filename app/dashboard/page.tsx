@@ -514,19 +514,34 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </div>
-                    <Badge className={getStatusColor(joinedRide.status)}>
-                      {joinedRide.status}
-                    </Badge>
-                    {(joinedRide.status === 'pending' || joinedRide.status === 'accepted') && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => openCancelDialog(joinedRide)}
-                        className="text-red-600 hover:text-red-700 border-red-200 hover:border-red-300"
-                      >
-                        Cancel
-                      </Button>
-                    )}
+                    <div className="flex items-center space-x-2">
+                      <Badge className={getStatusColor(joinedRide.status)}>
+                        {joinedRide.status}
+                      </Badge>
+                      
+                      {(joinedRide.status === 'pending' || joinedRide.status === 'accepted') && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => openCancelDialog(joinedRide)}
+                              className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Cancel Participation
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
