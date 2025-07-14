@@ -1,11 +1,23 @@
-import createMiddleware from 'next-intl/middleware';
+import createIntlMiddleware from 'next-intl/middleware';
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
 
-const intlMiddleware = createMiddleware({
+const intlMiddleware = createIntlMiddleware({
   locales: ['en', 'de'],
   defaultLocale: 'en',
-  localePrefix: 'as-needed'
+  localePrefix: 'as-needed',
+  pathnames: {
+    '/': '/',
+    '/dashboard': '/dashboard',
+    '/search': '/search',
+    '/create-ride': '/create-ride',
+    '/pricing': '/pricing',
+    '/about': '/about',
+    '/help': '/help',
+    '/terms': '/terms',
+    '/privacy': '/privacy',
+    '/cookies': '/cookies'
+  }
 });
 
 const isProtectedRoute = createRouteMatcher([
