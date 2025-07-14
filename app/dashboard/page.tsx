@@ -113,11 +113,15 @@ export default function DashboardPage() {
 
     setDeleting(true);
     try {
+      // First check if the ride belongs to the current user
+      if (rideToDelete.user_id !== user?.id) {
+        throw new Error('Unauthorized: You can only delete your own rides');
+      }
+
       const { error } = await supabase
         .from('rides')
         .delete()
-        .eq('id', rideToDelete.id)
-        .eq('user_id', user?.id); // Extra security check
+        .eq('id', rideToDelete.id);
 
       if (error) throw error;
       
@@ -134,7 +138,7 @@ export default function DashboardPage() {
       setRideToDelete(null);
     } catch (error) {
       console.error('Error deleting ride:', error);
-      toast.error('Failed to delete ride');
+      toast.error(error instanceof Error ? error.message : 'Failed to delete ride');
       // On error, refresh data to ensure consistency
       fetchDashboardData();
     } finally {
