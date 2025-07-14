@@ -71,6 +71,13 @@ export default function SearchPage() {
       return;
     }
 
+    // Check if this is the user's own ride
+    const ride = rides.find(r => r.id === rideId);
+    if (ride && ride.user_id === user.id) {
+      toast.error('You cannot join your own ride');
+      return;
+    }
+
     try {
       // Check if user already has a pending/accepted request for this ride
       const { data: existingRequest, error: checkError } = await supabase
@@ -300,13 +307,19 @@ export default function SearchPage() {
                               per person
                             </div>
                           </div>
-                          <Button
-                            onClick={() => handleJoinRide(ride.id)}
-                            disabled={!user}
-                            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                          >
-                            {user ? 'Join Ride' : 'Sign In to Join'}
-                          </Button>
+                          {ride.user_id === user?.id ? (
+                            <Button disabled variant="outline">
+                              Your Ride
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => handleJoinRide(ride.id)}
+                              disabled={!user}
+                              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                            >
+                              {user ? 'Join Ride' : 'Sign In to Join'}
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </CardContent>
