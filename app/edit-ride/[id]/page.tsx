@@ -89,6 +89,13 @@ export default function EditRidePage() {
 
     setLoading(true);
     try {
+      console.log('Updating ride with data:', {
+        id: ride.id,
+        user_id: user.id,
+        ride_user_id: ride.user_id,
+        formData
+      });
+
       const { error } = await supabase
         .from('rides')
         .update({
@@ -103,15 +110,20 @@ export default function EditRidePage() {
           price_per_person: parseFloat(formData.price_per_person),
           updated_at: new Date().toISOString()
         })
-        .eq('id', ride.id);
+        .eq('id', ride.id)
+        .eq('user_id', user.id); // Additional security check
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase update error:', error);
+        throw error;
+      }
 
+      console.log('Ride updated successfully');
       toast.success('Ride updated successfully!');
       router.push('/dashboard');
     } catch (error) {
       console.error('Error updating ride:', error);
-      toast.error('Failed to update ride');
+      toast.error(error instanceof Error ? error.message : 'Failed to update ride');
     } finally {
       setLoading(false);
     }
