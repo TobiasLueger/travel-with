@@ -72,6 +72,29 @@ export default function SearchPage() {
     }
 
     try {
+      // Check if user already has a pending/accepted request for this ride
+      const { data: existingRequest, error: checkError } = await supabase
+        .from('ride_joins')
+        .select('id, status')
+        .eq('ride_id', rideId)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.error('Error checking existing request:', checkError);
+        throw checkError;
+      }
+
+      if (existingRequest) {
+        if (existingRequest.status === 'pending') {
+          toast.error('You already have a pending request for this ride');
+          return;
+        } else if (existingRequest.status === 'accepted') {
+          toast.error('You have already joined this ride');
+          return;
+        }
+      }
+
       const { error } = await supabase
         .from('ride_joins')
         .insert({
@@ -83,11 +106,15 @@ export default function SearchPage() {
           message: 'I would like to join this ride'
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating join request:', error);
+        throw error;
+      }
+      
       toast.success('Join request sent successfully!');
     } catch (error) {
       console.error('Error joining ride:', error);
-      toast.error('Failed to send join request');
+      toast.error(error instanceof Error ? error.message : 'Failed to send join request');
     }
   };
 
