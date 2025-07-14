@@ -1,7 +1,10 @@
 import { Header } from '@/components/header';
 import { HeroSection } from '@/components/hero-section';
-import { HowItWorks } from '@/components/how-it-works';
-import { Testimonials } from '@/components/testimonials';
+import { PopularRoutes } from '@/components/popular-routes';
+import { QuickSearch } from '@/components/quick-search';
+import { WhyChooseUs } from '@/components/why-choose-us';
+import { RecentRides } from '@/components/recent-rides';
+import { CommunityStats } from '@/components/community-stats';
 import { Footer } from '@/components/footer';
 
 export default function Home() {
@@ -10,8 +13,11 @@ export default function Home() {
       <Header />
       <main>
         <HeroSection />
-        <HowItWorks />
-        <Testimonials />
+        <QuickSearch />
+        <PopularRoutes />
+        <WhyChooseUs />
+        <RecentRides />
+        <CommunityStats />
       </main>
       <Footer />
     </div>
