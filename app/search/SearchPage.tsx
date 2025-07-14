@@ -26,6 +26,32 @@ export default function SearchPage() {
     transport: searchParams.get('transport') || 'any'
   });
 
+  // State to track user's join requests
+  const [userJoinRequests, setUserJoinRequests] = useState<{[rideId: string]: string}>({});
+
+  // Fetch user's existing join requests
+  const fetchUserJoinRequests = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('ride_joins')
+        .select('ride_id, status')
+        .eq('user_id', user.id)
+        .in('status', ['pending', 'accepted']);
+
+      if (error) throw error;
+
+      const requestsMap: {[rideId: string]: string} = {};
+      data?.forEach(request => {
+        requestsMap[request.ride_id] = request.status;
+      });
+      setUserJoinRequests(requestsMap);
+    } catch (error) {
+      console.error('Error fetching user join requests:', error);
+    }
+  };
+
   const searchRides = async () => {
     setLoading(true);
     try {
@@ -52,6 +78,11 @@ export default function SearchPage() {
       const { data, error } = await query;
       if (error) throw error;
       setRides(data || []);
+      
+      // Fetch user's join requests after loading rides
+      if (user) {
+        await fetchUserJoinRequests();
+      }
     } catch (error) {
       console.error('Error searching rides:', error);
       toast.error('Failed to search rides');
@@ -78,30 +109,17 @@ export default function SearchPage() {
       return;
     }
 
+    // Check if user already has a pending or accepted request
+    const existingStatus = userJoinRequests[rideId];
+    if (existingStatus === 'pending') {
+      toast.error('You already have a pending request for this ride');
+      return;
+    } else if (existingStatus === 'accepted') {
+      toast.error('You have already joined this ride');
+      return;
+    }
+
     try {
-      // Check if user already has a pending/accepted request for this ride
-      const { data: existingRequest, error: checkError } = await supabase
-        .from('ride_joins')
-        .select('id, status')
-        .eq('ride_id', rideId)
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (checkError && checkError.code !== 'PGRST116') {
-        console.error('Error checking existing request:', checkError);
-        throw checkError;
-      }
-
-      if (existingRequest) {
-        if (existingRequest.status === 'pending') {
-          toast.error('You already have a pending request for this ride');
-          return;
-        } else if (existingRequest.status === 'accepted') {
-          toast.error('You have already joined this ride');
-          return;
-        }
-      }
-
       const { error } = await supabase
         .from('ride_joins')
         .insert({
@@ -117,6 +135,12 @@ export default function SearchPage() {
         console.error('Error creating join request:', error);
         throw error;
       }
+      
+      // Update local state to reflect the new pending request
+      setUserJoinRequests(prev => ({
+        ...prev,
+        [rideId]: 'pending'
+      }));
       
       toast.success('Join request sent successfully!');
     } catch (error) {
@@ -154,6 +178,12 @@ export default function SearchPage() {
   useEffect(() => {
     searchRides();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserJoinRequests();
+    }
+  }, [user]);
 
   return (
     <Suspense fallback={<div>Loading search...</div>}>
@@ -298,6 +328,26 @@ export default function SearchPage() {
                           )}
                         </div>
                         
+  // Function to get button text and state based on ride and user status
+  const getJoinButtonState = (ride: Ride) => {
+    if (!user) {
+      return { text: 'Sign In to Join', disabled: true };
+    }
+    
+    if (ride.user_id === user.id) {
+      return { text: 'Your Ride', disabled: true };
+    }
+    
+    const joinStatus = userJoinRequests[ride.id];
+    if (joinStatus === 'pending') {
+      return { text: 'Request Pending', disabled: true };
+    } else if (joinStatus === 'accepted') {
+      return { text: 'Already Joined', disabled: true };
+    }
+    
+    return { text: 'Join Ride', disabled: false };
+  };
+
                         <div className="mt-4 lg:mt-0 lg:ml-6 flex items-center">
                           <div className="text-right mr-4">
                             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
@@ -307,19 +357,19 @@ export default function SearchPage() {
                               per person
                             </div>
                           </div>
-                          {ride.user_id === user?.id ? (
-                            <Button disabled variant="outline">
-                              Your Ride
-                            </Button>
-                          ) : (
-                            <Button
-                              onClick={() => handleJoinRide(ride.id)}
-                              disabled={!user}
-                              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                            >
-                              {user ? 'Join Ride' : 'Sign In to Join'}
-                            </Button>
-                          )}
+                          {(() => {
+                            const buttonState = getJoinButtonState(ride);
+                            return (
+                              <Button
+                                onClick={() => !buttonState.disabled && handleJoinRide(ride.id)}
+                                disabled={buttonState.disabled}
+                                variant={buttonState.disabled ? "outline" : "default"}
+                                className={!buttonState.disabled ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" : ""}
+                              >
+                                {buttonState.text}
+                              </Button>
+                            );
+                          })()}
                         </div>
                       </div>
                     </CardContent>
