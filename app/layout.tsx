@@ -4,8 +4,6 @@ import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'react-hot-toast';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,13 +13,11 @@ export const metadata: Metadata = {
   keywords: 'rideshare, carpool, train sharing, travel companions, free rides',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const messages = await getMessages();
-
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
@@ -32,9 +28,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <NextIntlClientProvider messages={messages}>
-              {children}
-            </NextIntlClientProvider>
+            {children}
             <Toaster position="top-right" />
           </ThemeProvider>
         </body>
