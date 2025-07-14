@@ -89,29 +89,54 @@ export default function EditRidePage() {
 
     setLoading(true);
     try {
+      // Validate form data
+      if (!formData.title.trim()) {
+        throw new Error('Title is required');
+      }
+      if (!formData.from_location.trim()) {
+        throw new Error('From location is required');
+      }
+      if (!formData.to_location.trim()) {
+        throw new Error('To location is required');
+      }
+      if (!formData.departure_date) {
+        throw new Error('Departure date is required');
+      }
+      if (!formData.departure_time) {
+        throw new Error('Departure time is required');
+      }
+
+      const updateData = {
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        from_location: formData.from_location.trim(),
+        to_location: formData.to_location.trim(),
+        departure_date: formData.departure_date,
+        departure_time: formData.departure_time,
+        available_seats: parseInt(formData.available_seats),
+        transport_type: formData.transport_type,
+        price_per_person: parseFloat(formData.price_per_person),
+        updated_at: new Date().toISOString()
+      };
+
+      console.log('Updating ride with data:', updateData);
+
       const { error } = await supabase
         .from('rides')
-        .update({
-          title: formData.title,
-          description: formData.description,
-          from_location: formData.from_location,
-          to_location: formData.to_location,
-          departure_date: formData.departure_date,
-          departure_time: formData.departure_time,
-          available_seats: parseInt(formData.available_seats),
-          transport_type: formData.transport_type,
-          price_per_person: parseFloat(formData.price_per_person),
-          updated_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', ride.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(error.message || 'Failed to update ride');
+      }
 
       toast.success('Ride updated successfully!');
       router.push('/dashboard');
     } catch (error) {
       console.error('Error updating ride:', error);
-      toast.error('Failed to update ride');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update ride';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

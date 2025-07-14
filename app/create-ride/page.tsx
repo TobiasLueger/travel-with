@@ -40,31 +40,56 @@ export default function CreateRidePage() {
 
     setLoading(true);
     try {
+      // Validate form data
+      if (!formData.title.trim()) {
+        throw new Error('Title is required');
+      }
+      if (!formData.from_location.trim()) {
+        throw new Error('From location is required');
+      }
+      if (!formData.to_location.trim()) {
+        throw new Error('To location is required');
+      }
+      if (!formData.departure_date) {
+        throw new Error('Departure date is required');
+      }
+      if (!formData.departure_time) {
+        throw new Error('Departure time is required');
+      }
+
+      const rideData = {
+        user_id: user.id,
+        user_email: user.emailAddresses[0]?.emailAddress || '',
+        user_name: user.username || user.fullName || 'Anonymous',
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        from_location: formData.from_location.trim(),
+        to_location: formData.to_location.trim(),
+        departure_date: formData.departure_date,
+        departure_time: formData.departure_time,
+        available_seats: parseInt(formData.available_seats),
+        transport_type: formData.transport_type,
+        price_per_person: parseFloat(formData.price_per_person),
+        status: 'active'
+      };
+
+      console.log('Creating ride with data:', rideData);
+
       const { error } = await supabase
         .from('rides')
-        .insert({
-          user_id: user.id,
-          user_email: user.emailAddresses[0]?.emailAddress || '',
-          user_name: user.username || user.fullName  || 'Anonymous',
-          title: formData.title,
-          description: formData.description,
-          from_location: formData.from_location,
-          to_location: formData.to_location,
-          departure_date: formData.departure_date,
-          departure_time: formData.departure_time,
-          available_seats: parseInt(formData.available_seats),
-          transport_type: formData.transport_type,
-          price_per_person: parseFloat(formData.price_per_person),
-          status: 'active'
-        });
+        .insert(rideData);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(error.message || 'Failed to create ride');
+      }
 
       toast.success('Ride created successfully!');
       router.push('/dashboard');
     } catch (error) {
       console.error('Error creating ride:', error);
-      toast.error('Failed to create ride');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create ride';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
