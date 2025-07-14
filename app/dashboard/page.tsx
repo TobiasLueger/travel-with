@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Car, Train, Bus, MapPin, Calendar, Clock, Users, Bell, Trash2, MoreVertical } from 'lucide-react';
+import { Plus, Car, Train, Bus, MapPin, Calendar, Clock, Users, Bell, Trash2, MoreVertical, Edit } from 'lucide-react';
 import { supabase, type Ride, type RideJoin } from '@/lib/supabase';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -396,6 +397,12 @@ export default function DashboardPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild>
+                            <Link href={`/edit-ride/${ride.id}`}>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit Ride
+                            </Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => openDeleteDialog(ride)}
                             className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
