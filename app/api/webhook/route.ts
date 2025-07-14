@@ -44,13 +44,18 @@ export async function POST(request: NextRequest) {
       case 'customer.subscription.deleted':
         const subscription = event.data.object;
         
+        // Type assertion to ensure we have the correct Stripe subscription object
+        const stripeSubscription = subscription as any;
+        
         await supabase
           .from('subscriptions')
           .update({
-            status: subscription.status,
-            current_period_end: new Date(subscription.current_period_end * 1000),
+            status: stripeSubscription.status,
+            current_period_end: stripeSubscription.current_period_end 
+              ? new Date(stripeSubscription.current_period_end * 1000) 
+              : null,
           })
-          .eq('stripe_subscription_id', subscription.id);
+          .eq('stripe_subscription_id', stripeSubscription.id);
         break;
 
       default:
