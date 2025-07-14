@@ -44,16 +44,27 @@ export default function EditRidePage() {
       if (!user || !rideId) return;
 
       try {
+        console.log('🔍 Fetching ride for editing...');
+        console.log('User ID:', user.id);
+        console.log('Ride ID:', rideId);
+        
         const { data, error } = await supabase
           .from('rides')
           .select('*')
           .eq('id', rideId)
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('❌ Error fetching ride:', error);
+          throw error;
+        }
+        
+        console.log('✅ Fetched ride data:', data);
 
         // Check if the ride belongs to the current user
         if (data.user_id !== user.id) {
+          console.error('❌ Unauthorized: Ride belongs to different user');
+          console.log('Ride owner:', data.user_id, 'Current user:', user.id);
           toast.error('You can only edit your own rides');
           router.push('/dashboard');
           return;
@@ -70,6 +81,12 @@ export default function EditRidePage() {
           available_seats: data.available_seats.toString(),
           transport_type: data.transport_type,
           price_per_person: data.price_per_person.toString()
+        });
+        
+        console.log('✅ Form data initialized:', {
+          title: data.title,
+          available_seats: data.available_seats,
+          transport_type: data.transport_type
         });
       } catch (error) {
         console.error('Error fetching ride:', error);
