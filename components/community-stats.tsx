@@ -233,17 +233,6 @@ export function CommunityStats() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Environmental Impact */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center space-x-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 px-4 py-2 rounded-full">
-            <Leaf className="h-5 w-5" />
-            <span className="font-medium">
-              Available Rides
-            </span>
-          </div>
-        </div>
-      </div>
     </section>
   );
 }
