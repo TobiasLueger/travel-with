@@ -3,13 +3,32 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
+// Debug environment variables
+console.log('🔧 Supabase Config:', {
+  url: supabaseUrl ? '✅ Set' : '❌ Missing',
+  key: supabaseAnonKey ? '✅ Set' : '❌ Missing'
+});
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: true,
+    debug: process.env.NODE_ENV === 'development'
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'travel-with-de'
+    }
   }
 });
+
+// Add auth state change listener for debugging
+if (process.env.NODE_ENV === 'development') {
+  supabase.auth.onAuthStateChange((event, session) => {
+    console.log('🔐 Auth state change:', event, session?.user?.id);
+  });
+}
 
 export interface Ride {
   id: string;
