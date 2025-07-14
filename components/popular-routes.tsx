@@ -131,6 +131,79 @@ export function PopularRoutes() {
     );
   }
 
+  // Show message when no routes are available
+  if (routes.length === 0 || routes.every(route => route.ride_count === 0)) {
+    return (
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-4">
+              <TrendingUp className="h-8 w-8 text-purple-600 mr-3" />
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Trending Routes
+              </h2>
+            </div>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Discover the most popular travel routes in Germany. Join thousands of travelers sharing their journeys.
+            </p>
+          </div>
+
+          {/* No routes available message */}
+          <Card className="max-w-2xl mx-auto">
+            <CardContent className="p-12 text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <TrendingUp className="h-10 w-10 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Noch keine Trending Routes
+              </h3>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                Unsere Community wächst noch! Sei einer der ersten, der eine Fahrt anbietet 
+                und hilf dabei, beliebte Routen zu etablieren.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  onClick={() => router.push('/create-ride')}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                >
+                  <MapPin className="mr-2 h-4 w-4" />
+                  Erste Fahrt erstellen
+                </Button>
+                <Button 
+                  onClick={() => router.push('/search')}
+                  variant="outline"
+                  className="hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300 dark:hover:border-purple-600"
+                >
+                  Alle Fahrten durchsuchen
+                </Button>
+              </div>
+              
+              {/* Encouraging stats */}
+              <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                  Sobald mehr Fahrten erstellt werden, siehst du hier die beliebtesten Routen
+                </p>
+                <div className="flex items-center justify-center space-x-6 text-sm">
+                  <div className="flex items-center text-gray-600 dark:text-gray-400">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    <span>100% kostenlos</span>
+                  </div>
+                  <div className="flex items-center text-gray-600 dark:text-gray-400">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                    <span>Sichere Community</span>
+                  </div>
+                  <div className="flex items-center text-gray-600 dark:text-gray-400">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                    <span>Umweltfreundlich</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="py-16 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
