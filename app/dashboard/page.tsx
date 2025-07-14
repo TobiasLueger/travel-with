@@ -154,6 +154,15 @@ export default function DashboardPage() {
             toast.error('Failed to update available seats');
             return;
           }
+
+          // Update local state to reflect the seat change
+          setMyRides(prevRides => 
+            prevRides.map(ride => 
+              ride.id === joinRequest.ride_id 
+                ? { ...ride, available_seats: ride.available_seats - 1 }
+                : ride
+            )
+          );
         }
       }
       

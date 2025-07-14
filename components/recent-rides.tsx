@@ -13,6 +13,7 @@ export function RecentRides() {
   const router = useRouter();
   const [recentRides, setRecentRides] = useState<Ride[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchRecentRides = async () => {
     try {
@@ -32,6 +33,12 @@ export function RecentRides() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Function to refresh rides data
+  const refreshRides = () => {
+    setRefreshKey(prev => prev + 1);
+    fetchRecentRides();
   };
 
   const getTransportIcon = (type: string) => {
@@ -62,8 +69,30 @@ export function RecentRides() {
 
   useEffect(() => {
     fetchRecentRides();
-  }, []);
+  }, [refreshKey]);
 
+  // Set up real-time subscription for rides updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('rides-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'rides'
+        },
+        () => {
+          // Refresh rides when any ride is updated
+          fetchRecentRides();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
   if (loading) {
     return (
       <section className="py-16 bg-white dark:bg-gray-900">
