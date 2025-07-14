@@ -505,6 +505,41 @@ export default function DashboardPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      
+      {/* Cancel Join Confirmation Dialog */}
+      <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancel Ride Participation</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to cancel your participation in this ride? The ride creator will be notified.
+            </AlertDialogDescription>
+            {joinToCancel && (
+              <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="font-medium text-gray-900 dark:text-white">
+                  {joinToCancel.ride.from_location} → {joinToCancel.ride.to_location}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">
+                  {format(new Date(joinToCancel.ride.departure_date), 'MMM d, yyyy')} at {joinToCancel.ride.departure_time}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">
+                  Offered by {joinToCancel.ride.user_name}
+                </div>
+              </div>
+            )}
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={canceling}>Keep Participation</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleCancelJoinedRide}
+              disabled={canceling}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {canceling ? 'Cancelling...' : 'Cancel Participation'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <Footer />
     </div>
   );
