@@ -44,27 +44,16 @@ export default function EditRidePage() {
       if (!user || !rideId) return;
 
       try {
-        console.log('🔍 Fetching ride for editing...');
-        console.log('User ID:', user.id);
-        console.log('Ride ID:', rideId);
-        
         const { data, error } = await supabase
           .from('rides')
           .select('*')
           .eq('id', rideId)
           .single();
 
-        if (error) {
-          console.error('❌ Error fetching ride:', error);
-          throw error;
-        }
-        
-        console.log('✅ Fetched ride data:', data);
+        if (error) throw error;
 
         // Check if the ride belongs to the current user
         if (data.user_id !== user.id) {
-          console.error('❌ Unauthorized: Ride belongs to different user');
-          console.log('Ride owner:', data.user_id, 'Current user:', user.id);
           toast.error('You can only edit your own rides');
           router.push('/dashboard');
           return;
@@ -81,12 +70,6 @@ export default function EditRidePage() {
           available_seats: data.available_seats.toString(),
           transport_type: data.transport_type,
           price_per_person: data.price_per_person.toString()
-        });
-        
-        console.log('✅ Form data initialized:', {
-          title: data.title,
-          available_seats: data.available_seats,
-          transport_type: data.transport_type
         });
       } catch (error) {
         console.error('Error fetching ride:', error);
@@ -185,44 +168,6 @@ export default function EditRidePage() {
       router.push('/dashboard');
     } catch (error) {
       console.error('❌ Error updating ride:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to update ride');
-    } finally {
-      setLoading(false);
-    }
-  };
-        id: ride.id,
-        user_id: user.id,
-        ride_user_id: ride.user_id,
-        formData
-      });
-
-      const { error } = await supabase
-        .from('rides')
-        .update({
-          title: formData.title,
-          description: formData.description,
-          from_location: formData.from_location,
-          to_location: formData.to_location,
-          departure_date: formData.departure_date,
-          departure_time: formData.departure_time,
-          available_seats: parseInt(formData.available_seats),
-          transport_type: formData.transport_type,
-          price_per_person: parseFloat(formData.price_per_person),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', ride.id)
-        .eq('user_id', user.id); // Additional security check
-
-      if (error) {
-        console.error('Supabase update error:', error);
-        throw error;
-      }
-
-      console.log('Ride updated successfully');
-      toast.success('Ride updated successfully!');
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Error updating ride:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to update ride');
     } finally {
       setLoading(false);
