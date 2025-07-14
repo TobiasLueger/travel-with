@@ -40,6 +40,14 @@ export default function CreateRidePage() {
 
     setLoading(true);
     try {
+      // Debug: Log user information
+      console.log('User object:', {
+        id: user.id,
+        email: user.emailAddresses[0]?.emailAddress,
+        username: user.username,
+        fullName: user.fullName
+      });
+
       // Validate form data
       if (!formData.title.trim()) {
         throw new Error('Title is required');
@@ -74,14 +82,33 @@ export default function CreateRidePage() {
       };
 
       console.log('Creating ride with data:', rideData);
-      console.log('User ID:', user.id);
+      
+      // Test database connection first
+      const { data: testData, error: testError } = await supabase
+        .from('rides')
+        .select('count')
+        .limit(1);
+      
+      if (testError) {
+        console.error('Database connection test failed:', testError);
+        throw new Error(`Database connection failed: ${testError.message}`);
+      }
+      
+      console.log('Database connection test passed');
 
       const { data, error } = await supabase
         .from('rides')
-        .insert(rideData);
+        .insert(rideData)
+        .select();
 
       if (error) {
         console.error('Supabase error:', error);
+        console.error('Error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         throw new Error(error.message || 'Failed to create ride');
       }
 
@@ -90,6 +117,7 @@ export default function CreateRidePage() {
       router.push('/dashboard');
     } catch (error) {
       console.error('Error creating ride:', error);
+      console.error('Full error object:', JSON.stringify(error, null, 2));
       const errorMessage = error instanceof Error ? error.message : 'Failed to create ride';
       toast.error(errorMessage);
     } finally {
