@@ -119,14 +119,42 @@ export default function DashboardPage() {
       if (action === 'accept') {
         const joinRequest = joinRequests.find(jr => jr.id === joinId);
         if (joinRequest) {
+          // First get the current ride data
+          const { data: currentRide, error: fetchError } = await supabase
+            .from('rides')
+            .select('available_seats')
+            .eq('id', joinRequest.ride_id)
+            .single();
+
+          if (fetchError) {
+            console.error('Error fetching ride data:', fetchError);
+            // Revert the join request if ride fetch failed
+            await supabase
+              .from('ride_joins')
+              .update({ status: 'pending' })
+              .eq('id', joinId);
+            toast.error('Failed to update available seats');
+            return;
+          }
+
+          if (currentRide.available_seats <= 0) {
+            // Revert the join request if no seats available
+            await supabase
+              .from('ride_joins')
+              .update({ status: 'pending' })
+              .eq('id', joinId);
+            toast.error('No seats available for this ride');
+            return;
+          }
+
+          // Update with decremented seat count
           const { error: rideError } = await supabase
             .from('rides')
             .update({ 
-              available_seats: supabase.sql`available_seats - 1`,
+              available_seats: currentRide.available_seats - 1,
               updated_at: new Date().toISOString()
             })
-            .eq('id', joinRequest.ride_id)
-            .gt('available_seats', 0);
+            .eq('id', joinRequest.ride_id);
 
           if (rideError) {
             console.error('Error updating ride seats:', rideError);
@@ -212,10 +240,23 @@ export default function DashboardPage() {
 
       // If the join request was accepted, we need to increase available seats
       if (joinToCancel.status === 'accepted') {
+        // First get the current ride data
+        const { data: currentRide, error: fetchError } = await supabase
+          .from('rides')
+          .select('available_seats')
+          .eq('id', joinToCancel.ride.id)
+          .single();
+
+        if (fetchError) {
+          console.error('Error fetching ride data:', fetchError);
+          throw new Error('Failed to update available seats');
+        }
+
+        // Update with incremented seat count
         const { error: rideError } = await supabase
           .from('rides')
           .update({ 
-            available_seats: supabase.sql`available_seats + 1`,
+            available_seats: currentRide.available_seats + 1,
             updated_at: new Date().toISOString()
           })
           .eq('id', joinToCancel.ride.id);
