@@ -121,13 +121,22 @@ export default function DashboardPage() {
 
       if (error) throw error;
       
+      // Immediately remove the ride from local state
+      setMyRides(prevRides => prevRides.filter(ride => ride.id !== rideToDelete.id));
+      
+      // Also remove any related join requests from local state
+      setJoinRequests(prevRequests => 
+        prevRequests.filter(request => request.ride_id !== rideToDelete.id)
+      );
+      
       toast.success('Ride deleted successfully');
       setDeleteDialogOpen(false);
       setRideToDelete(null);
-      fetchDashboardData(); // Refresh the data
     } catch (error) {
       console.error('Error deleting ride:', error);
       toast.error('Failed to delete ride');
+      // On error, refresh data to ensure consistency
+      fetchDashboardData();
     } finally {
       setDeleting(false);
     }
