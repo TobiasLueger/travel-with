@@ -1,24 +1,93 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, MapPin, Heart, Leaf, TrendingUp, Globe } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
+interface CommunityData {
+  totalUsers: number;
+  totalRides: number;
+  activeRides: number;
+}
 export function CommunityStats() {
   const router = useRouter();
+  const [communityData, setCommunityData] = useState<CommunityData>({
+    totalUsers: 0,
+    totalRides: 0,
+    activeRides: 0
+  });
+  const [loading, setLoading] = useState(true);
 
-  const stats = [
+  const fetchCommunityData = async () => {
+    try {
+      // Get total rides count
+      const { count: totalRidesCount, error: ridesError } = await supabase
+        .from('rides')
+        .select('*', { count: 'exact', head: true });
+
+      if (ridesError) throw ridesError;
+
+      // Get active rides count
+      const { count: activeRidesCount, error: activeError } = await supabase
+        .from('rides')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'active')
+        .gte('departure_date', new Date().toISOString().split('T')[0]);
+
+      if (activeError) throw activeError;
+
+      // Get unique users count (approximate from rides)
+      const { data: uniqueUsers, error: usersError } = await supabase
+        .from('rides')
+        .select('user_id');
+
+      if (usersError) throw usersError;
+
+      const uniqueUserIds = new Set(uniqueUsers?.map(ride => ride.user_id) || []);
+
+      setCommunityData({
+        totalUsers: uniqueUserIds.size,
+        totalRides: totalRidesCount || 0,
+        activeRides: activeRidesCount || 0
+      });
+    } catch (error) {
+      console.error('Error fetching community data:', error);
+      // Fallback to default values
+      setCommunityData({
+        totalUsers: 0,
+        totalRides: 0,
+        activeRides: 0
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return `${(num / 1000000).toFixed(1)}M+`;
+    } else if (num >= 1000) {
+      return `${(num / 1000).toFixed(1)}K+`;
+    } else if (num === 0) {
+      return 'Growing';
+    }
+    return num.toString();
+  };
+
+  const getStats = () => [
     {
       icon: <Users className="h-8 w-8" />,
-      value: '1,000,000+',
+      value: formatNumber(communityData.totalUsers),
       label: 'Active Travelers',
       description: 'Join our growing community',
       color: 'from-purple-500 to-indigo-500'
     },
     {
       icon: <MapPin className="h-8 w-8" />,
-      value: '50,000+',
+      value: formatNumber(communityData.totalRides),
       label: 'Rides Shared',
       description: 'Successful journeys completed',
       color: 'from-blue-500 to-cyan-500'
@@ -32,7 +101,7 @@ export function CommunityStats() {
     },
     {
       icon: <Leaf className="h-8 w-8" />,
-      value: '2,500 tons',
+      value: communityData.totalRides > 0 ? `${Math.round(communityData.totalRides * 0.05)} tons` : 'Growing',
       label: 'CO₂ Saved',
       description: 'Environmental impact',
       color: 'from-green-500 to-emerald-500'
@@ -57,6 +126,31 @@ export function CommunityStats() {
     }
   ];
 
+  useEffect(() => {
+    fetchCommunityData();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-900/20 dark:via-pink-900/20 dark:to-orange-900/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Our Community Impact
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="animate-pulse">
+                <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-900/20 dark:via-pink-900/20 dark:to-orange-900/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,7 +165,7 @@ export function CommunityStats() {
 
         {/* Main Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {stats.map((stat, index) => (
+          {getStats().map((stat, index) => (
             <Card key={index} className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
                 <div className={`w-16 h-16 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-4 text-white`}>
@@ -134,7 +228,7 @@ export function CommunityStats() {
                 className="border-white text-white hover:bg-white hover:text-purple-600"
               >
                 Offer a Ride
-              </Button>
+              {formatNumber(communityData.activeRides)}
             </div>
           </CardContent>
         </Card>
@@ -144,7 +238,7 @@ export function CommunityStats() {
           <div className="inline-flex items-center space-x-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 px-4 py-2 rounded-full">
             <Leaf className="h-5 w-5" />
             <span className="font-medium">
-              Every shared ride helps reduce traffic and emissions
+              Available Rides
             </span>
           </div>
         </div>
