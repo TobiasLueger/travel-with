@@ -224,8 +224,7 @@ export function CommunityStats() {
               </Button>
               <Button 
                 onClick={() => router.push('/create-ride')}
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-purple-600"
+                className="bg-white text-purple-600 hover:bg-gray-100"
               >
                 Offer a Ride
               </Button>
