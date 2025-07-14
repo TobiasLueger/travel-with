@@ -66,6 +66,17 @@ export function CommunityStats() {
     }
   };
 
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return `${(num / 1000000).toFixed(1)}M+`;
+    } else if (num >= 1000) {
+      return `${(num / 1000).toFixed(1)}K+`;
+    } else if (num === 0) {
+      return 'Growing';
+    }
+    return num.toString();
+  };
+
   const getStats = () => [
     {
       icon: <Users className="h-8 w-8" />,
