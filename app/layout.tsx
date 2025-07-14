@@ -17,28 +17,23 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params: { locale }
 }: {
   children: React.ReactNode;
-  params: { locale: string };
 }) {
-  const messages = await getMessages();
 
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <NextIntlClientProvider messages={messages}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-              <Toaster position="top-right" />
-            </ThemeProvider>
-          </NextIntlClientProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster position="top-right" />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
