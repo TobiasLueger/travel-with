@@ -10,9 +10,11 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Star, Users, Shield, Zap } from 'lucide-react';
 import { createCheckoutSession } from '@/lib/stripe';
 import toast from 'react-hot-toast';
+import { useSubscription } from '@/hooks/use-subscription';
 
 export default function PricingPage() {
   const { user } = useUser();
+  const { isPremium, isTrialActive, subscription } = useSubscription();
   const [loading, setLoading] = useState(false);
 
   const handleSubscribe = async () => {
@@ -22,20 +24,30 @@ export default function PricingPage() {
     }
 
     setLoading(true);
-    /*try {
-      const session = await createCheckoutSession(
-        user.id,
-        user.emailAddresses[0]?.emailAddress || ''
-      );
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userEmail: user.emailAddresses[0]?.emailAddress || '',
+        }),
+      });
+
+      const data = await response.json();
       
-      window.location.href = session.url!;
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+      
+      window.location.href = data.url;
     } catch (error) {
       console.error('Error creating checkout session:', error);
       toast.error('Failed to start subscription process');
     } finally {
       setLoading(false);
-    }*/
-    setLoading(false);
+    }
   };
 
   const features = [
@@ -143,13 +155,18 @@ export default function PricingPage() {
               </div>
               <Button
                 onClick={handleSubscribe}
-                disabled={loading}
+                disabled={loading || isPremium}
                 className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                {loading ? 'Processing...' : 'Start Free Trial'}
+                {loading ? 'Processing...' : 
+                 isPremium ? 'Already Subscribed' : 'Start Free Trial'}
               </Button>
               <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                Cancel anytime. No hidden fees.
+                {isPremium ? 
+                  `Active until ${subscription?.current_period_end ? 
+                    new Date(subscription.current_period_end).toLocaleDateString() : 'N/A'}` :
+                  'Cancel anytime. No hidden fees.'
+                }
               </p>
             </CardContent>
           </Card>

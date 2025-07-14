@@ -33,8 +33,8 @@ export const createCheckoutSession = async (userId: string, userEmail: string) =
     subscription_data: {
       trial_period_days: 60, // 2-month free trial
     },
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/pricing`,
     metadata: {
       userId,
     },

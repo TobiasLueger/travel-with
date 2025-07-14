@@ -13,9 +13,11 @@ import { supabase, type Ride, type RideJoin } from '@/lib/supabase';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { useSubscription } from '@/hooks/use-subscription';
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser();
+  const { subscription, isPremium, isTrialActive } = useSubscription();
   const [myRides, setMyRides] = useState<Ride[]>([]);
   const [joinRequests, setJoinRequests] = useState<RideJoin[]>([]);
   const [myJoinedRides, setMyJoinedRides] = useState<(RideJoin & { ride: Ride })[]>([]);
@@ -145,6 +147,19 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Welcome back, {user?.firstName || 'Traveler'}!
           </h1>
+          {isPremium && (
+            <div className="flex items-center space-x-2 mb-2">
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                Premium
+              </span>
+              {isTrialActive && (
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  Trial active until {subscription?.current_period_end ? 
+                    new Date(subscription.current_period_end).toLocaleDateString() : 'N/A'}
+                </span>
+              )}
+            </div>
+          )}
           <p className="text-gray-600 dark:text-gray-300">
             Manage your rides and connect with fellow travelers.
           </p>
