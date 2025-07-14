@@ -472,17 +472,17 @@ export default function DashboardPage() {
             <AlertDialogTitle>Delete Ride</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete this ride? This action cannot be undone.
-              {rideToDelete && (
-                <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <div className="font-medium text-gray-900 dark:text-white">
-                    {rideToDelete.from_location} → {rideToDelete.to_location}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    {format(new Date(rideToDelete.departure_date), 'MMM d, yyyy')} at {rideToDelete.departure_time}
-                  </div>
-                </div>
-              )}
             </AlertDialogDescription>
+            {rideToDelete && (
+              <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="font-medium text-gray-900 dark:text-white">
+                  {rideToDelete.from_location} → {rideToDelete.to_location}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">
+                  {format(new Date(rideToDelete.departure_date), 'MMM d, yyyy')} at {rideToDelete.departure_time}
+                </div>
+              </div>
+            )}
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
