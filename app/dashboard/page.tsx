@@ -41,6 +41,9 @@ export default function DashboardPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [rideToDelete, setRideToDelete] = useState<Ride | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [joinToCancel, setJoinToCancel] = useState<(RideJoin & { ride: Ride }) | null>(null);
+  const [canceling, setCanceling] = useState(false);
 
   if (isLoaded && !user) {
     redirect('/');
