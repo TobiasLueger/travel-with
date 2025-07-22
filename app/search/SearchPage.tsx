@@ -216,63 +216,63 @@ export default function SearchPage() {
 
   return (
     <Suspense fallback={<div>Loading search...</div>}>
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Header />
-        <main className="max-w-7xl mx-auto mt-[5rem] px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <main className="max-w-7xl mx-auto mt-[5rem] container-padding section-padding">
+          <div className="mb-12">
+            <h1 className="text-display text-black dark:text-white mb-4">
               Find Your Perfect Ride
             </h1>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-body-large text-gray-600 dark:text-gray-400">
               Search through thousands of available rides and find your travel companions.
             </p>
           </div>
   
           {/* Search Form */}
-          <Card className="mb-8">
+          <Card className="modern-card mb-12">
             <CardHeader>
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center text-black dark:text-white">
                 <Search className="mr-2 h-5 w-5" />
                 Search Rides
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSearch} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <CardContent className="pt-0">
+              <form onSubmit={handleSearch} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <MapPin className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       type="text"
                       placeholder="From"
                       value={searchForm.from}
                       onChange={(e) => setSearchForm({ ...searchForm, from: e.target.value })}
-                      className="pl-10"
+                      className="modern-input pl-12"
                     />
                   </div>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <MapPin className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       type="text"
                       placeholder="To"
                       value={searchForm.to}
                       onChange={(e) => setSearchForm({ ...searchForm, to: e.target.value })}
-                      className="pl-10"
+                      className="modern-input pl-12"
                     />
                   </div>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Calendar className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       type="date"
                       value={searchForm.date}
                       onChange={(e) => setSearchForm({ ...searchForm, date: e.target.value })}
-                      className="pl-10"
+                      className="modern-input pl-12"
                     />
                   </div>
                   <div className="relative">
                     <select
                       value={searchForm.transport}
                       onChange={(e) => setSearchForm({ ...searchForm, transport: e.target.value })}
-                      className="w-full h-10 pl-10 pr-4 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-md text-sm"
+                      className="modern-input pl-12 appearance-none"
                     >
                       <option value="any">Any transport</option>
                       <option value="car">Car</option>
@@ -280,12 +280,12 @@ export default function SearchPage() {
                       <option value="bus">Bus</option>
                       <option value="other">Other</option>
                     </select>
-                    <div className="absolute left-3 top-3 h-5 w-5 text-gray-400">
+                    <div className="absolute left-4 top-4 h-5 w-5 text-gray-400">
                       {getTransportIcon(searchForm.transport)}
                     </div>
                   </div>
                 </div>
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" disabled={loading} className="btn-modern">
                   {loading ? 'Searching...' : 'Search'}
                 </Button>
               </form>
@@ -293,76 +293,78 @@ export default function SearchPage() {
           </Card>
   
           {/* Results */}
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="space-y-8">
+            <h2 className="text-headline text-black dark:text-white">
               Available Rides ({rides.length})
             </h2>
             
             {rides.length === 0 ? (
-              <Card>
-                <CardContent className="p-12 text-center">
-                 <Search className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              <Card className="modern-card">
+                <CardContent className="p-16 text-center">
+                  <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <Search className="h-12 w-12 text-gray-400 dark:text-gray-600" />
+                  </div>
+                  <h3 className="text-headline text-black dark:text-white mb-4">
                     No rides found
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300">
+                  <p className="text-body-large text-gray-600 dark:text-gray-400">
                     Try adjusting your search criteria or check back later for new rides.
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-6">
+              <div className="space-y-6">
                 {rides.map((ride) => (
-                  <Card key={ride.id} className="hover:shadow-lg transition-shadow">
-                    <CardContent className="p-6">
+                  <Card key={ride.id} className="modern-card emotional-hover">
+                    <CardContent className="p-8">
                       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center mb-2">
-                            <Badge className={`mr-2 ${getTransportColor(ride.transport_type)}`}>
+                          <div className="flex items-center mb-4">
+                            <div className={`mr-3 px-3 py-1 rounded-full text-xs font-medium ${getTransportColor(ride.transport_type)}`}>
                               <div className="flex items-center">
                                 {getTransportIcon(ride.transport_type)}
-                                <span className="ml-1 capitalize">{ride.transport_type}</span>
+                                <span className="ml-2 capitalize">{ride.transport_type}</span>
                               </div>
-                            </Badge>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                            </div>
+                            <span className="text-sm text-gray-500 dark:text-gray-500">
                               by {ride.user_name}
                             </span>
                           </div>
                           
-                          <div className="flex items-center text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                          <div className="flex items-center text-xl font-bold text-black dark:text-white mb-4">
                             <span>{ride.from_location}</span>
-                            <span className="mx-2">→</span>
+                            <span className="mx-4 text-gray-400 dark:text-gray-600">→</span>
                             <span>{ride.to_location}</span>
                           </div>
                           
-                          <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-300">
+                          <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-400 mb-4">
                             <div className="flex items-center">
-                              <Calendar className="h-4 w-4 mr-1" />
+                              <Calendar className="h-4 w-4 mr-2" />
                               {format(new Date(ride.departure_date), 'MMM d, yyyy')}
                             </div>
                             <div className="flex items-center">
-                              <Clock className="h-4 w-4 mr-1" />
+                              <Clock className="h-4 w-4 mr-2" />
                               {ride.departure_time}
                             </div>
                             <div className="flex items-center">
-                              <Users className="h-4 w-4 mr-1" />
+                              <Users className="h-4 w-4 mr-2" />
                               {ride.available_seats} seats available
                             </div>
                           </div>
                           
                           {ride.description && (
-                            <p className="mt-2 text-gray-700 dark:text-gray-300">
+                            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                               {ride.description}
                             </p>
                           )}
                         </div>
                         
-                        <div className="mt-4 lg:mt-0 lg:ml-6 flex items-center">
-                          <div className="text-right mr-4">
-                            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                        <div className="mt-6 lg:mt-0 lg:ml-8 flex items-center">
+                          <div className="text-right mr-6">
+                            <div className="text-3xl font-black text-green-600 dark:text-green-400">
                               FREE
                             </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                            <div className="text-sm text-gray-500 dark:text-gray-500">
                               per person
                             </div>
                           </div>
@@ -372,8 +374,7 @@ export default function SearchPage() {
                               <Button
                                 onClick={() => !buttonState.disabled && handleJoinRide(ride.id)}
                                 disabled={buttonState.disabled}
-                                variant={buttonState.disabled ? "outline" : "default"}
-                                className={!buttonState.disabled ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" : ""}
+                                className={buttonState.disabled ? "btn-modern-outline opacity-50 cursor-not-allowed" : "btn-modern"}
                               >
                                 {buttonState.text}
                               </Button>

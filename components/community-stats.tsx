@@ -152,32 +152,36 @@ export function CommunityStats() {
   }
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+    <section className="section-padding bg-gray-50 dark:bg-gray-950">
+      <div className="max-w-7xl mx-auto container-padding">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center px-6 py-3 bg-white dark:bg-black rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 mb-8 shadow-sm">
+            <Users className="w-4 h-4 mr-2" />
+            Community Impact
+          </div>
+          <h2 className="text-display text-black dark:text-white mb-6">
             Our Community Impact
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-body-large text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             Together, we're building a more connected and sustainable way to travel. See how our community is making a difference.
           </p>
         </div>
 
         {/* Main Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
           {getStats().map((stat, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className={`w-16 h-16 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-4 text-white`}>
+            <Card key={index} className="modern-card emotional-hover text-center group">
+              <CardContent className="p-8">
+                <div className={`w-20 h-20 bg-gradient-to-br ${stat.color} rounded-3xl flex items-center justify-center mx-auto mb-6 text-white group-hover:scale-110 transition-all duration-300`}>
                   {stat.icon}
                 </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <div className="text-4xl font-black text-black dark:text-white mb-3">
                   {stat.value}
                 </div>
-                <div className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                <div className="text-lg font-bold text-black dark:text-white mb-2">
                   {stat.label}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600 dark:text-gray-500">
                   {stat.description}
                 </div>
               </CardContent>
@@ -186,18 +190,18 @@ export function CommunityStats() {
         </div>
 
         {/* Achievements */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {achievements.map((achievement, index) => (
-            <Card key={index} className="hover:shadow-md transition-shadow">
-              <CardContent className="p-6 flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center text-white flex-shrink-0">
+            <Card key={index} className="modern-card emotional-hover">
+              <CardContent className="p-8 flex items-center space-x-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-black to-gray-800 dark:from-white dark:to-gray-200 rounded-3xl flex items-center justify-center text-white dark:text-black flex-shrink-0">
                   {achievement.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                  <h3 className="font-bold text-black dark:text-white mb-2 text-lg">
                     {achievement.title}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <p className="text-gray-600 dark:text-gray-400">
                     {achievement.description}
                   </p>
                 </div>
@@ -207,25 +211,27 @@ export function CommunityStats() {
         </div>
 
         {/* Call to Action */}
-        <Card className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">
+        <Card className="bg-black dark:bg-white text-white dark:text-black modern-card">
+          <CardContent className="p-12 text-center">
+            <h3 className="text-headline mb-6">
               Ready to Join Our Community?
             </h3>
-            <p className="text-lg mb-6 opacity-90">
+            <p className="text-body-large mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
               Start your journey today. Find rides, meet new people, and help build a more sustainable future.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button 
                 onClick={() => router.push('/search')}
-                className="bg-white text-purple-600 hover:bg-gray-100"
+                className="bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full px-8 py-4 font-semibold transition-all duration-300 hover:scale-105"
               >
+                <Search className="mr-2 h-4 w-4" />
                 Find a Ride
               </Button>
               <Button 
                 onClick={() => router.push('/create-ride')}
-                className="bg-white text-purple-600 hover:bg-gray-100"
+                className="bg-transparent border-2 border-white dark:border-black text-white dark:text-black hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white rounded-full px-8 py-4 font-semibold transition-all duration-300"
               >
+                <Plus className="mr-2 h-4 w-4" />
                 Offer a Ride
               </Button>
             </div>

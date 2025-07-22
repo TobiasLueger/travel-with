@@ -352,76 +352,76 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Header />
-      <main className="max-w-7xl mx-auto mt-[5rem] px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+      <main className="max-w-7xl mx-auto mt-[5rem] container-padding section-padding">
+        <div className="mb-12">
+          <h1 className="text-display text-black dark:text-white mb-4">
             Welcome back, {user?.firstName || 'Traveler'}!
           </h1>
           {isPremium && (
-            <div className="flex items-center space-x-2 mb-2">
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+            <div className="flex items-center space-x-3 mb-4">
+              <span className="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-full text-sm font-bold">
                 Premium
               </span>
               {isTrialActive && (
-                <span className="text-sm text-gray-600 dark:text-gray-400">
+                <span className="text-sm text-gray-500 dark:text-gray-500">
                   Trial active until {subscription?.current_period_end ? 
                     new Date(subscription.current_period_end).toLocaleDateString() : 'N/A'}
                 </span>
               )}
             </div>
           )}
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-body-large text-gray-600 dark:text-gray-400">
             Manage your rides and connect with fellow travelers.
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <Card className="modern-card emotional-hover">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-500">
                 My Rides
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <CardContent className="pt-0">
+              <div className="text-4xl font-black text-black dark:text-white mb-2">
                 {myRides.length}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500 dark:text-gray-500">
                 Active rides offered
               </div>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <Card className="modern-card emotional-hover">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-500">
                 Join Requests
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <CardContent className="pt-0">
+              <div className="text-4xl font-black text-black dark:text-white mb-2">
                 {joinRequests.length}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500 dark:text-gray-500">
                 Pending requests
               </div>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <Card className="modern-card emotional-hover">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-500">
                 Joined Rides
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <CardContent className="pt-0">
+              <div className="text-4xl font-black text-black dark:text-white mb-2">
                 {myJoinedRides.length}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-sm text-gray-500 dark:text-gray-500">
                 Rides I've joined
               </div>
             </CardContent>
@@ -429,15 +429,16 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-6 mb-12">
           <Link href="/create-ride">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Button className="btn-modern group">
               <Plus className="mr-2 h-4 w-4" />
               Create New Ride
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
           <Link href="/search">
-            <Button variant="outline">
+            <Button className="btn-modern-outline">
               <MapPin className="mr-2 h-4 w-4" />
               Search Rides
             </Button>
@@ -446,37 +447,35 @@ export default function DashboardPage() {
 
         {/* Join Requests */}
         {joinRequests.length > 0 && (
-          <Card className="mb-8">
+          <Card className="modern-card mb-12">
             <CardHeader>
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center text-black dark:text-white">
                 <Bell className="mr-2 h-5 w-5" />
                 Pending Join Requests
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {joinRequests.map((request) => (
-                  <div key={request.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <div key={request.id} className="flex items-center justify-between p-6 bg-white dark:bg-black rounded-2xl border border-gray-100 dark:border-gray-800">
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
+                      <p className="font-bold text-black dark:text-white mb-1">
                         {request.user_name}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-gray-600 dark:text-gray-400">
                         {request.message}
                       </p>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-3">
                       <Button
-                        size="sm"
                         onClick={() => handleJoinRequest(request.id, 'accept')}
-                        className="bg-green-600 hover:bg-green-700"
+                        className="bg-green-600 hover:bg-green-700 text-white rounded-full px-4 py-2 text-sm font-medium"
                       >
                         Accept
                       </Button>
                       <Button
-                        size="sm"
-                        variant="outline"
                         onClick={() => handleJoinRequest(request.id, 'reject')}
+                        className="bg-transparent border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full px-4 py-2 text-sm font-medium"
                       >
                         Reject
                       </Button>

@@ -130,46 +130,47 @@ export default function CreateRidePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Header />
-      <main className="max-w-3xl mx-auto mt-[5rem] px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+      <main className="max-w-4xl mx-auto mt-[5rem] container-padding section-padding">
+        <div className="mb-12">
+          <h1 className="text-display text-black dark:text-white mb-4">
             Create a New Ride
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-body-large text-gray-600 dark:text-gray-400">
             Offer a ride and connect with fellow travelers going your way.
           </p>
         </div>
 
-        <Card>
+        <Card className="modern-card">
           <CardHeader>
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex items-center text-black dark:text-white">
               <Plus className="mr-2 h-5 w-5" />
               Ride Details
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CardContent className="pt-0">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <Label htmlFor="title">Ride Title</Label>
+                  <Label htmlFor="title" className="text-black dark:text-white font-medium mb-2 block">Ride Title</Label>
                   <Input
                     id="title"
                     type="text"
                     value={formData.title}
                     onChange={(e) => handleChange('title', e.target.value)}
                     placeholder="e.g., Berlin to Munich"
+                    className="modern-input"
                     required
                   />
                 </div>
                 <div>
-                  <Label htmlFor="transport_type">Transport Type</Label>
+                  <Label htmlFor="transport_type" className="text-black dark:text-white font-medium mb-2 block">Transport Type</Label>
                   <select
                     id="transport_type"
                     value={formData.transport_type}
                     onChange={(e) => handleChange('transport_type', e.target.value)}
-                    className="w-full h-10 px-3 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-md text-sm"
+                    className="modern-input"
                     required
                   >
                     <option value="car">Car</option>
@@ -180,72 +181,72 @@ export default function CreateRidePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <Label htmlFor="from_location">From</Label>
+                  <Label htmlFor="from_location" className="text-black dark:text-white font-medium mb-2 block">From</Label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <MapPin className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       id="from_location"
                       type="text"
                       value={formData.from_location}
                       onChange={(e) => handleChange('from_location', e.target.value)}
                       placeholder="Departure location"
-                      className="pl-10"
+                      className="modern-input pl-12"
                       required
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="to_location">To</Label>
+                  <Label htmlFor="to_location" className="text-black dark:text-white font-medium mb-2 block">To</Label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <MapPin className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       id="to_location"
                       type="text"
                       value={formData.to_location}
                       onChange={(e) => handleChange('to_location', e.target.value)}
                       placeholder="Destination"
-                      className="pl-10"
+                      className="modern-input pl-12"
                       required
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                  <Label htmlFor="departure_date">Departure Date</Label>
+                  <Label htmlFor="departure_date" className="text-black dark:text-white font-medium mb-2 block">Departure Date</Label>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Calendar className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       id="departure_date"
                       type="date"
                       value={formData.departure_date}
                       onChange={(e) => handleChange('departure_date', e.target.value)}
-                      className="pl-10"
+                      className="modern-input pl-12"
                       required
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="departure_time">Departure Time</Label>
+                  <Label htmlFor="departure_time" className="text-black dark:text-white font-medium mb-2 block">Departure Time</Label>
                   <div className="relative">
-                    <Clock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Clock className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       id="departure_time"
                       type="time"
                       value={formData.departure_time}
                       onChange={(e) => handleChange('departure_time', e.target.value)}
-                      className="pl-10"
+                      className="modern-input pl-12"
                       required
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="available_seats">Available Seats</Label>
+                  <Label htmlFor="available_seats" className="text-black dark:text-white font-medium mb-2 block">Available Seats</Label>
                   <div className="relative">
-                    <Users className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Users className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
                     <Input
                       id="available_seats"
                       type="number"
@@ -253,7 +254,7 @@ export default function CreateRidePage() {
                       max="8"
                       value={formData.available_seats}
                       onChange={(e) => handleChange('available_seats', e.target.value)}
-                      className="pl-10"
+                      className="modern-input pl-12"
                       required
                     />
                   </div>
@@ -261,30 +262,31 @@ export default function CreateRidePage() {
               </div>
 
               <div>
-                <Label htmlFor="description">Description (Optional)</Label>
+                <Label htmlFor="description" className="text-black dark:text-white font-medium mb-2 block">Description (Optional)</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
                   placeholder="Add any additional details about your ride..."
+                  className="modern-input resize-none"
                   rows={3}
                 />
               </div>
 
-              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                <h3 className="font-semibold text-green-800 dark:text-green-400 mb-2">
+              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-2xl border border-green-200 dark:border-green-800">
+                <h3 className="font-bold text-green-800 dark:text-green-400 mb-3">
                   Free Community Ride
                 </h3>
-                <p className="text-sm text-green-700 dark:text-green-300">
+                <p className="text-green-700 dark:text-green-300 leading-relaxed">
                   This ride is offered for free as part of our community spirit. 
                   Travelers can share costs like gas or train tickets voluntarily.
                 </p>
               </div>
 
-              <div className="flex justify-end space-x-4">
+              <div className="flex justify-end space-x-6 pt-4">
                 <Button
                   type="button"
-                  variant="outline"
+                  className="btn-modern-outline"
                   onClick={() => router.back()}
                 >
                   Cancel
@@ -292,7 +294,7 @@ export default function CreateRidePage() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  className="btn-modern"
                 >
                   {loading ? 'Creating...' : 'Create Ride'}
                 </Button>
