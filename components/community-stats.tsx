@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, MapPin, Heart, Leaf, TrendingUp, Globe, Search } from 'lucide-react';
+import { Users, MapPin, Heart, Leaf, TrendingUp, Globe, Search, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
