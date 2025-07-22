@@ -1,70 +1,108 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { Car } from 'lucide-react';
+import { ArrowRight, Circle, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export function HeroSection() {
   const router = useRouter();
 
   return (
-    <section className="relative bg-white dark:bg-gray-900 pt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row gap-10 md:gap-2 items-center justify-between min-h-screen py-20">
+    <section className="relative bg-white dark:bg-black pt-20 overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-50 dark:bg-gray-950 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-100 dark:bg-gray-900 rounded-full blur-3xl opacity-20"></div>
+      </div>
+      
+      <div className="relative max-w-7xl mx-auto container-padding">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-8 items-center justify-between min-h-screen section-padding">
           {/* Left Column - Text Content */}
-          <div className="flex-1 max-w-2xl">
-            <h1 className="text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight mb-8">
-              Meet Your New
+          <div className="flex-1 max-w-3xl animate-fade-in-up">
+            <div className="mb-8">
+              <div className="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-900 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 mb-8">
+                <Circle className="w-2 h-2 bg-green-500 rounded-full mr-2" />
+                Free Community Rides
+              </div>
+            </div>
+            
+            <h1 className="text-hero gradient-text mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+              Travel
               <br />
-              Transport App
+              <span className="italic font-light">Together</span>
             </h1>
             
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-12 max-w-md leading-relaxed">
-              Caring for people during they are outside,
+            <p className="text-body-large text-gray-600 dark:text-gray-400 mb-12 max-w-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              Connect with fellow travelers and share your journey.
               <br />
-              on bike, in subway or car.
+              Find free rides by car, train, and other transport across Germany.
             </p>
             
-            <Button
-              onClick={() => router.push('/search')}
-              className="bg-black hover:bg-gray-800 text-white rounded-full px-8 py-4 text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200 group"
-            >
-              FIND YOUR RIDE NOW
-              <Car className="ml-3 h-5 w-5" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+              <Button
+                onClick={() => router.push('/search')}
+                className="btn-modern group"
+              >
+                Find Your Ride
+                <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+              
+              <Button
+                onClick={() => router.push('/create-ride')}
+                className="btn-modern-outline"
+              >
+                Offer a Ride
+              </Button>
+            </div>
+            
+            {/* Stats */}
+            <div className="flex items-center space-x-8 mt-16 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <div>
+                <div className="text-2xl font-bold text-black dark:text-white">1M+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-500">Travelers</div>
+              </div>
+              <div className="w-px h-8 bg-gray-200 dark:bg-gray-800"></div>
+              <div>
+                <div className="text-2xl font-bold text-black dark:text-white">50K+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-500">Rides Shared</div>
+              </div>
+              <div className="w-px h-8 bg-gray-200 dark:bg-gray-800"></div>
+              <div>
+                <div className="text-2xl font-bold text-black dark:text-white">100%</div>
+                <div className="text-sm text-gray-500 dark:text-gray-500">Free</div>
+              </div>
+            </div>
           </div>
 
           {/* Right Column - Colorful Location Pin */}
-          <div className="flex-1 flex justify-center items-center">
-            <div className="relative">
-              {/* Main location pin shape */}
-              <div className="w-80 h-96 relative">
-                {/* Pin body - gradient sections */}
-                <div className="absolute inset-0 rounded-t-full rounded-b-lg overflow-hidden shadow-2xl">
-                  {/* Top section - purple/blue */}
-                  <div className="absolute top-0 left-0 w-full h-1/4 bg-gradient-to-r from-purple-600 to-blue-600"></div>
-                  
-                  {/* Right section - pink/red */}
-                  <div className="absolute top-1/4 right-0 w-1/2 h-1/2 bg-gradient-to-b from-pink-500 to-red-500"></div>
-                  
-                  {/* Left section - purple */}
-                  <div className="absolute top-1/4 left-0 w-1/2 h-1/4 bg-purple-500"></div>
-                  
-                  {/* Bottom left - yellow */}
-                  <div className="absolute bottom-1/4 left-0 w-1/2 h-1/4 bg-yellow-400"></div>
-                  
-                  {/* Bottom right - orange */}
-                  <div className="absolute bottom-0 right-0 w-1/2 h-1/4 bg-orange-500"></div>
-                  
-                  {/* Bottom center - yellow continuation */}
-                  <div className="absolute bottom-0 left-1/4 w-1/2 h-1/4 bg-yellow-400"></div>
+          <div className="flex-1 flex justify-center items-center animate-slide-in-right">
+            <div className="relative w-full max-w-lg">
+              {/* Modern Abstract Visualization */}
+              <div className="relative w-96 h-96 mx-auto">
+                {/* Main Circle */}
+                <div className="absolute inset-0 bg-black dark:bg-white rounded-full shadow-2xl animate-pulse-subtle"></div>
+                
+                {/* Inner Elements */}
+                <div className="absolute inset-8 bg-white dark:bg-black rounded-full flex items-center justify-center">
+                  <MapPin className="w-16 h-16 text-black dark:text-white" />
                 </div>
                 
-                {/* White center circle */}
-                <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-white rounded-full shadow-lg"></div>
+                {/* Floating Elements */}
+                <div className="absolute top-8 right-8 w-4 h-4 bg-gray-300 dark:bg-gray-700 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                <div className="absolute bottom-12 left-12 w-3 h-3 bg-gray-400 dark:bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }}></div>
+                <div className="absolute top-16 left-16 w-2 h-2 bg-gray-500 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute bottom-8 right-16 w-3 h-3 bg-gray-300 dark:bg-gray-700 rounded-full animate-bounce" style={{ animationDelay: '1.5s' }}></div>
                 
-                {/* Pin point at bottom */}
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-2 w-0 h-0 border-l-8 border-r-8 border-t-12 border-l-transparent border-r-transparent border-t-yellow-400"></div>
+                {/* Connection Lines */}
+                <div className="absolute top-1/2 left-1/2 w-32 h-px bg-gray-200 dark:bg-gray-800 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
+                <div className="absolute top-1/2 left-1/2 w-24 h-px bg-gray-300 dark:bg-gray-700 transform -translate-x-1/2 -translate-y-1/2 -rotate-45"></div>
+              </div>
+              
+              {/* Decorative Text */}
+              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+                <p className="text-sm text-gray-400 dark:text-gray-600 font-medium tracking-wide">
+                  Connecting Travelers
+                </p>
               </div>
             </div>
           </div>
