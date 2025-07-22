@@ -26,7 +26,7 @@ export function HeroSection() {
               </div>
             </div>
             
-            <h1 className="text-hero gradient-text pb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-hero gradient-text protectedb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
               Travel
               <br />
               <span className="italic font-light">Together</span>
