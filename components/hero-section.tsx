@@ -22,7 +22,7 @@ export function HeroSection() {
             <div className="mb-8">
               <div className="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-900 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 mb-8">
                 <Circle className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-                Free Community Ridess
+                Free Community Rides
               </div>
             </div>
             
