@@ -62,7 +62,7 @@ export default function SearchPage() {
         .gt('available_seats', 0)
         .order('departure_date', { ascending: true });
 
-      const today = new Date().toISOString().split('T')[0]; // Nur heutige oder zukünftige Fahrten
+      const today = new Date().toISOString().split('T')[0];
       query = query.gte('departure_date', today);
       
       if (searchForm.from) {
