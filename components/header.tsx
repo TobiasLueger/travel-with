@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser, SignInButton, SignOutButton } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
-import { Circle, Menu, X, User, Settings, LogOut, Plus, Search } from 'lucide-react';
+import { Circle, Menu, X, User, Settings, LogOut, Plus, Search, Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import {
   DropdownMenu,
@@ -13,11 +13,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Toggle } from '@/components/ui/toggle';
 
 export function Header() {
   const { user, isSignedIn } = useUser();
   const { theme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const navigation = [
     { name: 'Search Rides', href: '/search', icon: Search },
@@ -54,6 +60,16 @@ export function Header() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            {isMounted && (
+              <Toggle
+                aria-label="Darkmode umschalten"
+                pressed={theme === 'dark'}
+                onPressedChange={(on) => setTheme(on ? 'dark' : 'light')}
+                className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white"
+              >
+                {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+              </Toggle>
+            )}
             {isSignedIn ? (
               <>
                 <Link href="/create-ride">
@@ -116,13 +132,24 @@ export function Header() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          {/* Mobile Menu Button + Darkmode Toggle */}
+          <div className="md:hidden flex items-center gap-2">
+            {isMounted && (
+              <Toggle
+                aria-label="Darkmode umschalten"
+                pressed={theme === 'dark'}
+                onPressedChange={(on) => setTheme(on ? 'dark' : 'light')}
+                className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white"
+              >
+                {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+              </Toggle>
+            )}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2"
+              aria-label="Menü öffnen"
             >
               {mobileMenuOpen ? (
                 <X className="h-6 w-6" />
