@@ -211,7 +211,7 @@ export function CommunityStats() {
         </div>
 
         {/* Call to Action */}
-        <Card className="bg-black dark:bg-white text-white dark:text-black modern-card">
+        <Card className="bg-white dark:bg-black text-black dark:text-white modern-card border-0">
           <CardContent className="p-12 text-center">
             <h3 className="text-headline mb-6">
               Ready to Join Our Community?
@@ -222,14 +222,14 @@ export function CommunityStats() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button 
                 onClick={() => router.push('/search')}
-                className="bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full px-8 py-4 font-semibold transition-all duration-300 hover:scale-105"
+                className="btn-modern group"
               >
-                <Search className="mr-2 h-4 w-4" />
+                <Search className="mr-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 Find a Ride
               </Button>
               <Button 
                 onClick={() => router.push('/create-ride')}
-                className="bg-transparent border-2 border-white dark:border-black text-white dark:text-black hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white rounded-full px-8 py-4 font-semibold transition-all duration-300"
+                className="btn-modern-outline"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Offer a Ride
