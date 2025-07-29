@@ -4,15 +4,14 @@ import { useState, useEffect, Suspense } from 'react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { MapPin, Calendar, Clock, Users, Car, Train, Bus, Search } from 'lucide-react';
 import { supabase, type Ride } from '@/lib/supabase';
 import { format } from 'date-fns';
 import { useSearchParams } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import toast from 'react-hot-toast';
+import { RideSearchForm } from '@/components/ride-search-form';
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -23,7 +22,8 @@ export default function SearchPage() {
     from: searchParams.get('from') || '',
     to: searchParams.get('to') || '',
     date: searchParams.get('date') || '',
-    transport: searchParams.get('transport') || 'any'
+    passengers: searchParams.get('passengers') || '1',
+    transport: searchParams.get('transport') || 'any',
   });
 
   // State to track user's join requests
@@ -52,7 +52,7 @@ export default function SearchPage() {
     }
   };
 
-  const searchRides = async () => {
+  const searchRides = async (criteria = searchForm) => {
     setLoading(true);
     try {
       let query = supabase
@@ -61,28 +61,27 @@ export default function SearchPage() {
         .eq('status', 'active')
         .gt('available_seats', 0)
         .order('departure_date', { ascending: true });
-
       const today = new Date().toISOString().split('T')[0];
       query = query.gte('departure_date', today);
-      
-      if (searchForm.from) {
-        query = query.ilike('from_location', `%${searchForm.from}%`);
+      if (criteria.from) {
+        query = query.ilike('from_location', `%${criteria.from}%`);
       }
-      if (searchForm.to) {
-        query = query.ilike('to_location', `%${searchForm.to}%`);
+      if (criteria.to) {
+        query = query.ilike('to_location', `%${criteria.to}%`);
       }
-      if (searchForm.date) {
-        query = query.eq('departure_date', searchForm.date);
+      if (criteria.date) {
+        query = query.eq('departure_date', criteria.date);
       }
-      if (searchForm.transport && searchForm.transport !== 'any') {
-        query = query.eq('transport_type', searchForm.transport);
+      if (criteria.transport && criteria.transport !== 'any') {
+        query = query.eq('transport_type', criteria.transport);
       }
-
+      if (criteria.passengers) {
+        const minSeats = criteria.passengers === '4' ? 4 : parseInt(criteria.passengers, 10);
+        query = query.gte('available_seats', minSeats);
+      }
       const { data, error } = await query;
       if (error) throw error;
       setRides(data || []);
-      
-      // Fetch user's join requests after loading rides
       if (user) {
         await fetchUserJoinRequests();
       }
@@ -94,9 +93,17 @@ export default function SearchPage() {
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    searchRides();
+  type RideSearchFormValues = {
+    from: string;
+    to: string;
+    date: string;
+    passengers: string;
+    transport: string;
+  };
+
+  const handleSearch = (values: RideSearchFormValues) => {
+    setSearchForm(values);
+    searchRides(values);
   };
 
   const handleJoinRide = async (rideId: string) => {
@@ -240,58 +247,11 @@ export default function SearchPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <form onSubmit={handleSearch} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="relative">
-                    <MapPin className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
-                    <Input
-                      type="text"
-                      placeholder="From"
-                      value={searchForm.from}
-                      onChange={(e) => setSearchForm({ ...searchForm, from: e.target.value })}
-                      className="modern-input pl-12"
-                    />
-                  </div>
-                  <div className="relative">
-                    <MapPin className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
-                    <Input
-                      type="text"
-                      placeholder="To"
-                      value={searchForm.to}
-                      onChange={(e) => setSearchForm({ ...searchForm, to: e.target.value })}
-                      className="modern-input pl-12"
-                    />
-                  </div>
-                  <div className="relative">
-                    <Calendar className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
-                    <Input
-                      type="date"
-                      value={searchForm.date}
-                      onChange={(e) => setSearchForm({ ...searchForm, date: e.target.value })}
-                      className="modern-input pl-12"
-                    />
-                  </div>
-                  <div className="relative">
-                    <select
-                      value={searchForm.transport}
-                      onChange={(e) => setSearchForm({ ...searchForm, transport: e.target.value })}
-                      className="modern-input pl-12 appearance-none"
-                    >
-                      <option value="any">Any transport</option>
-                      <option value="car">Car</option>
-                      <option value="train">Train</option>
-                      <option value="bus">Bus</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <div className="absolute left-4 top-4 h-5 w-5 text-gray-400">
-                      {getTransportIcon(searchForm.transport)}
-                    </div>
-                  </div>
-                </div>
-                <Button type="submit" disabled={loading} className="btn-modern">
-                  {loading ? 'Searching...' : 'Search'}
-                </Button>
-              </form>
+              <RideSearchForm
+                initialValues={searchForm}
+                onSearch={handleSearch}
+                loading={loading}
+              />
             </CardContent>
           </Card>
   
