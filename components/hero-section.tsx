@@ -61,7 +61,7 @@ export function HeroSection() {
                 {isSignedIn ? (
                   'Offer a Ride'
                 ) : (
-                  <SignInButton mode="modal">
+                  <SignInButton mode="modal" forceRedirectUrl="/create-ride">
                     Offer a Ride
                   </SignInButton>
                 )}
