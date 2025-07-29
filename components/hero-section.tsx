@@ -3,9 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Circle, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useUser, SignInButton } from '@clerk/nextjs';
 
 export function HeroSection() {
   const router = useRouter();
+  const { user, isSignedIn } = useUser();
 
   return (
     <section className="relative bg-white dark:bg-black pt-20 overflow-hidden">
@@ -48,10 +50,21 @@ export function HeroSection() {
               </Button>
               
               <Button
-                onClick={() => router.push('/create-ride')}
+                onClick={() => {
+                  if (isSignedIn) {
+                    router.push('/create-ride');
+                  }
+                }}
                 className="btn-modern-outline"
+                asChild={!isSignedIn}
               >
-                Offer a Ride
+                {isSignedIn ? (
+                  'Offer a Ride'
+                ) : (
+                  <SignInButton mode="modal">
+                    Offer a Ride
+                  </SignInButton>
+                )}
               </Button>
             </div>
             
